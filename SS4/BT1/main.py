@@ -2,7 +2,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-#Không dùng dấu {} nên FastAPI sẽ hiểu đó là đường dẫn cố định, không phải biến.
 products = [
     {"id": 1, "name": "Laptop Dell", "price": 15000000},
     {"id": 2, "name": "Chuột Logitech", "price": 350000},
