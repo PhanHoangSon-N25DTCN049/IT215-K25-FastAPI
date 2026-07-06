@@ -14,7 +14,7 @@ flights_db = [
 
 app = FastAPI()
 class ResponseAPI(BaseModel):
-    status: str
+    status: int
     message: str
     data: Any | None = None
     error: Any | None = None
