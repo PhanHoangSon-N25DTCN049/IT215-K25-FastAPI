@@ -81,7 +81,7 @@ def get_flights(
     status:str | None = None
 ):
     flights_list = flights_db
-    if not status:
+    if status:
         flights_list = [f for f in flights_list if f["status"] == status]
     return api_response(request,status=200, message="Lấy danh sách chuyến bay thành công", data=flights_list)
 
@@ -107,7 +107,7 @@ def create_flight(flight: CreateFlights, request: Request):
     return api_response(request,status=201, message="Khởi tạo chuyến bay mới thành công!", data=new_flight)
 
 
-@app.delete("flights/{flight_id}", status_code=status.HTTP_200_OK, response_model=ResponseAPI, tags=["Flights"])
+@app.delete("/flights/{flight_id}", status_code=status.HTTP_200_OK, response_model=ResponseAPI, tags=["Flights"])
 def del_flight(flight_id:int, request: Request):
     flight = next((f for f in flights_db if f["id"] == flight_id), None)
     if not flight:
