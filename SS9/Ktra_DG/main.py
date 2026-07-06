@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, field_validator
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from typing import Any
+from typing import Any, Literal
 from datetime import datetime
 
 flights_db = [
@@ -77,8 +77,9 @@ class CreateFlights(BaseModel):
 
 @app.get("/flights", status_code=status.HTTP_200_OK,response_model=ResponseAPI, tags=["Flights"])
 def get_flights(
-    status:str | None = None,
+    status:str | None = None
 ):
+    flights_list = flights_db
     if not status:
         flights_list = [f for f in flights_list if f["status"] == status]
     return api_response(status=200, message="Lấy danh sách chuyến bay thành công", data=flights_list)
