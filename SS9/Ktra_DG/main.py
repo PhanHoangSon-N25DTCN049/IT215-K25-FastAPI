@@ -77,15 +77,16 @@ class CreateFlights(BaseModel):
 
 @app.get("/flights", status_code=status.HTTP_200_OK,response_model=ResponseAPI, tags=["Flights"])
 def get_flights(
+    request: Request,
     status:str | None = None
 ):
     flights_list = flights_db
     if not status:
         flights_list = [f for f in flights_list if f["status"] == status]
-    return api_response(status=200, message="Lấy danh sách chuyến bay thành công", data=flights_list)
+    return api_response(request,status=200, message="Lấy danh sách chuyến bay thành công", data=flights_list)
 
 @app.post("/flights", status_code=status.HTTP_201_CREATED, response_model=ResponseAPI, tags=["Flights"])
-def create_flight(flight: CreateFlights):
+def create_flight(flight: CreateFlights, request: Request):
     
     if any(f["flight_number"] == flight.flight_number for f in flights_db):
         raise HTTPException(
@@ -103,11 +104,11 @@ def create_flight(flight: CreateFlights):
     }
     
     flights_db.append(new_flight)
-    return api_response(status=201, message="Khởi tạo chuyến bay mới thành công!", data=new_flight)
+    return api_response(request,status=201, message="Khởi tạo chuyến bay mới thành công!", data=new_flight)
 
 
 @app.delete("flights/{flight_id}", status_code=status.HTTP_200_OK, response_model=ResponseAPI, tags=["Flights"])
-def del_flight(flight_id:int):
+def del_flight(flight_id:int, request: Request):
     flight = next((f for f in flights_db if f["id"] == flight_id), None)
     if not flight:
         raise HTTPException(
@@ -115,4 +116,4 @@ def del_flight(flight_id:int):
             detail="Lỗi: Không tìm thấy mã chuyến bay yêu cầu để hủy!"
         )
     flights_db.remove(flight)
-    return api_response(status=200, message="Hủy chuyến bay thành công!")
+    return api_response(request,status=200, message="Hủy chuyến bay thành công!")
