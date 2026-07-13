@@ -30,11 +30,12 @@ def update(db:Session, student_id: int ,student_data: dict):
     
     return student
 
-def del_student(student_id: int, db:Session):
+def del_s(student_id: int, db:Session):
     student = db.query(Students).filter(Students.id == student_id).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student Not Found")
     db.delete(student)
     db.commit()
+    return
     
         

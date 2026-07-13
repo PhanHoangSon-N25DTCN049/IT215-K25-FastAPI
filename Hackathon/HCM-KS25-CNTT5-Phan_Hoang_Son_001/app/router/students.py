@@ -59,7 +59,7 @@ def updata_student(student_id: int, student_data: CreateStudent,request:Request,
 @router.delete("/students/{student_id}", status_code=status.HTTP_200_OK, response_model=APIResponse)
 def del_student(student_id: int, request: Request, db: Session = Depends(get_db)):
     try: 
-        del_student(student_id, db)
+        del_s(student_id=student_id, db=db)
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
