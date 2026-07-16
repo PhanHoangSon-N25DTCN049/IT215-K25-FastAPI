@@ -12,9 +12,9 @@ class DoctorCreate(BaseModel):
     clinic_id: int
 
 class DoctorUpdate(BaseModel):
-    doctor_code: str  
-    salary: float 
-    clinic_id: int
+    doctor_code: Optional[str] = None
+    salary: Optional[float] = None
+    clinic_id: Optional[int] = None
 
 class ClinicResponse(BaseModel):
     id: int

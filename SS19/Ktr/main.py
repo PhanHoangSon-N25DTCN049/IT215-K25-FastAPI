@@ -29,6 +29,20 @@ def get_clinic_app(clinic_id: int, db: Session = Depends(get_db)):
 
 @app.post("/doctors", status_code=status.HTTP_201_CREATED, response_model=DoctorResponse)
 def create_doctor_app(doctor_data: DoctorCreate, db:Session = Depends(get_db)):
+    clinic = get_clinic_by_id(db, doctor_data.clinic_id)
+    if not clinic:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phòng khám không tồn tại"
+        )
+    
+    existing_doctor = db.query(Doctor).filter(Doctor.doctor_code == doctor_data.doctor_code).first()
+    if existing_doctor:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Mã bác sĩ đã tồn tại"
+        )
+        
     try:
         new_doctor = create_doctor(db, doctor_data)
     except Exception:
@@ -54,14 +68,33 @@ def update_doctor_endpoint(
     doctor_update: DoctorUpdate, 
     db: Session = Depends(get_db)
 ):
-    updated_doctor = update_doctor(db=db, doctor_id=doctor_id, doctor_update=doctor_update)
-    
-    if not updated_doctor:
+    db_doctor = get_doctor_by_id(db, doctor_id)
+    if not db_doctor:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
-            detail="Doctor not found"
+            detail="Không tìm thấy bác sĩ"
         )
-        
+    
+    if doctor_update.clinic_id is not None:
+        clinic = get_clinic_by_id(db, doctor_update.clinic_id)
+        if not clinic:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Phòng khám không tồn tại"
+            )
+            
+    if doctor_update.doctor_code is not None:
+        existing_doctor = db.query(Doctor).filter(
+            Doctor.doctor_code == doctor_update.doctor_code,
+            Doctor.id != doctor_id
+        ).first()
+        if existing_doctor:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Mã bác sĩ đã tồn tại"
+            )
+
+    updated_doctor = update_doctor(db=db, doctor_id=doctor_id, doctor_update=doctor_update)
     return updated_doctor
 
 @app.delete("/licenses/{license_id}", status_code=status.HTTP_204_NO_CONTENT)

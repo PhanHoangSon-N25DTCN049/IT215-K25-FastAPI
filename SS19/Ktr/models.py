@@ -8,7 +8,7 @@ class Clinic(Base):
     clinic_name: Mapped[str] = mapped_column(String(100), nullable=False)
     specialty: Mapped[str] = mapped_column(String(100), nullable=False)
     
-    doctor: Mapped[list["Doctor"]] = relationship(back_populates="clinic")
+    doctors: Mapped[list["Doctor"]] = relationship(back_populates="clinic")
     
 class Doctor(Base):
     __tablename__ = "doctors"
@@ -18,7 +18,7 @@ class Doctor(Base):
     salary: Mapped[float] = mapped_column(Float, nullable=False)
     clinic_id: Mapped[int] = mapped_column(ForeignKey("clinics.id"), )
     
-    clinic: Mapped["Clinic"] = relationship(back_populates="doctor")
+    clinic: Mapped["Clinic"] = relationship(back_populates="doctors")
     license: Mapped["License"] = relationship(back_populates="doctor", uselist=False)
     
     
