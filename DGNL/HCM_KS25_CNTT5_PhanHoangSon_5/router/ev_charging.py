@@ -26,7 +26,7 @@ def post_stations(station_data:StationCreate, db: Session = Depends(get_db)):
     
     
 
-@router.get("/stations", status_code=status.HTTP_201_CREATED, response_model=StationResponse)
+@router.get("/stations", status_code=status.HTTP_200_OK, response_model=StationResponse)
 def get_stations(db: Session = Depends(get_db)):
     return api_response(
         statusCode=200,
