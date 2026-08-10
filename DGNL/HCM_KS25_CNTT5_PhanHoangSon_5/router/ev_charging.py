@@ -10,15 +10,15 @@ router = APIRouter(tags=["ev_charging_management"])
 
 @router.post("/stations", status_code=status.HTTP_201_CREATED, response_model=StationResponse)
 def post_stations(station_data:StationCreate, db: Session = Depends(get_db)):
-    station_data = station_data.model_dump()
-    if db.query(StationsModel).filter(StationsModel.station_code == station_data["station_code"]).first():
+    station = station_data.model_dump()
+    if db.query(StationsModel).filter(StationsModel.station_code == station["station_code"]).first():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Mã Trạm sạc đã tồn tại"
         )
     
     
-    new_station = StationsModel(**station_data)
+    new_station = StationsModel(**station_data.model_dump())
     db.add(new_station)
     db.commit()
     db.refresh(new_station)
