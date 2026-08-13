@@ -33,14 +33,20 @@ class EmployeesData(BaseModel):
     class Config:
             from_attributes = True
     
-class EmployeesResponse(BaseModel):
+class DepartmentsResponse(BaseModel):
     statusCode: int
     message: str
-    data: List["EmployeesData"]
+    data: List["DepartmentsData"] | "DepartmentsData" | None = None
     error: str | None = None
     path: str
     
-
+class EmployeesResponse(BaseModel):
+    statusCode: int
+    message: str
+    data: List["EmployeesData"] | "EmployeesData" | None = None
+    error: str | None = None
+    path: str
+    
 def api_response(request: Request, statusCode: int, message: str, data: Any = None, error: str = None):
     return {
         "statusCode": statusCode,
