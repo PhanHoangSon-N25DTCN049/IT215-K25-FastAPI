@@ -3,6 +3,8 @@ from fastapi import Request
 from datetime import datetime
 from typing import Any, Literal
 from app.models import UserRole
+
+
 class UserRegisterRequest(BaseModel):
     username: str
     password: str
@@ -15,6 +17,11 @@ class UserLoginRequest(BaseModel):
 class ChangePasswordRequest(BaseModel):
     old_password: str
     new_password: str
+    
+class TransferRequest(BaseModel):
+    to_username:str
+    amount: float = Field(gt=0)
+    note: str
 
 class UserResponse(BaseModel):
     id: int

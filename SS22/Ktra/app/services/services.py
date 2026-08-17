@@ -18,3 +18,11 @@ def add_user(user_data: dict, db: Session):
     db.refresh(user_new)
     
     return user_new
+
+def transaction(user1: Users, user2: Users,amount: float, db: Session):
+    setattr(user1, "balance", (user1.balance - amount))
+    setattr(user2, "balance", (user2.balance + amount))
+    db.commit()
+    
+def query_all_user(db:Session):
+    return db.query(Users).all()
