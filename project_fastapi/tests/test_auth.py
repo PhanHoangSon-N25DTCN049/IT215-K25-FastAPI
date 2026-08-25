@@ -199,3 +199,18 @@ def test_refresh_token_invalid_signature(client):
     data = response.json()
     assert data["statusCode"] == 401
     assert "Không thể xác thực thông tin" in data["message"]
+
+
+def test_login_rate_limit_exceeded(client, test_user):
+    """Gọi đăng nhập vượt quá 5 lần / phút -> 429 Too Many Requests"""
+    # 5 requests within limit (regardless of success/failure)
+    for _ in range(5):
+        client.post("/auth/login", data={"email": "wrong@test.com", "password": "wrongpassword"})
+    
+    # 6th request must trigger rate limit
+    response = client.post("/auth/login", data={"email": test_user.email, "password": "Password123!"})
+    assert response.status_code == 429
+    data = response.json()
+    assert data["statusCode"] == 429
+    assert "Bạn đã thử quá số lần cho phép" in data["message"]
+

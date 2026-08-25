@@ -88,7 +88,7 @@ def verify_project_member(
             (ProjectMembersModel.project_id == ProjectModel.id) & 
             (ProjectMembersModel.user_id == user_id)
         )\
-        .filter(ProjectModel.id == project_id)\
+        .filter(ProjectModel.id == project_id, ProjectModel.is_delete == False)\
         .first()
     
     if not result:
@@ -123,13 +123,15 @@ def verify_task_member(
     user_id = int(user.get("sub"))
     
     result = db.query(TaskModel, ProjectMembersModel)\
+        .join(ProjectModel, ProjectModel.id == TaskModel.project_id)\
         .outerjoin(
             ProjectMembersModel,
             (ProjectMembersModel.project_id == TaskModel.project_id) & 
             (ProjectMembersModel.user_id == user_id)
         )\
-        .filter(TaskModel.id == task_id)\
+        .filter(TaskModel.id == task_id, ProjectModel.is_delete == False)\
         .first()
+
         
     if not result:
         raise NotFoundException("Task không tồn tại")

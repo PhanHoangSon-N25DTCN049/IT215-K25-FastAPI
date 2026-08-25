@@ -59,9 +59,14 @@ class InvalidInputException(AppException):
     """Ngoại lệ khi dữ liệu đầu vào không hợp lệ (422)."""
     def __init__(self, message: str = "Dữ liệu đầu vào không hợp lệ"):
         super().__init__(message=message, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class TooManyRequestsException(AppException):
+    """Ngoại lệ khi vượt quá tần suất yêu cầu cho phép (429)."""
+    def __init__(self, message: str = "Bạn đã thực hiện quá nhiều yêu cầu. Vui lòng thử lại sau!"):
+        super().__init__(message=message, status_code=status.HTTP_429_TOO_MANY_REQUESTS)
         
 
-        
 def setup_exception_handlers(app: FastAPI):
     @app.exception_handler(StarletteHTTPException)
     def customize_http_exc(request: Request, exc: StarletteHTTPException):
@@ -94,14 +99,30 @@ def setup_exception_handlers(app: FastAPI):
             
     @app.exception_handler(RequestValidationError)
     def customize_request_validate_error(request: Request, exc: RequestValidationError):
-            return JSONResponse(
-                status_code=422,
-                content={
-                    "statusCode": 422,
-                    "message": "Lỗi dữ liệu đầu vào",
-                    "data": None,
-                    "error": exc.errors(),
-                    "path": request.url.path,
-                    "timestamp": datetime.now().isoformat()
-                }
-            )
+        return JSONResponse(
+            status_code=422,
+            content={
+                "statusCode": 422,
+                "message": "Lỗi dữ liệu đầu vào",
+                "data": None,
+                "error": exc.errors(),
+                "path": request.url.path,
+                "timestamp": datetime.now().isoformat()
+            }
+        )
+
+    from slowapi.errors import RateLimitExceeded
+
+    @app.exception_handler(RateLimitExceeded)
+    def customize_rate_limit_exceeded_error(request: Request, exc: RateLimitExceeded):
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            content={
+                "statusCode": 429,
+                "message": f"Bạn đã thử quá số lần cho phép ({exc.detail}). Vui lòng thử lại sau!",
+                "data": None,
+                "error": HTTPStatus(429).phrase,
+                "path": request.url.path,
+                "timestamp": datetime.now().isoformat()
+            }
+        )

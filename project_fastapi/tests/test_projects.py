@@ -161,9 +161,16 @@ def test_delete_project_as_owner(client, user_headers, test_user, db_session):
     assert res.status_code == 200
     assert "Xóa dự án thành công" in res.json()["message"]
 
-    # Verify deleted
+    # Verify deleted via API
     check_res = client.get(f"/project/{proj.id}", headers=user_headers)
     assert check_res.status_code == 404
+
+    # Verify soft deleted in database (data is preserved, not permanently deleted)
+    db_proj = db_session.query(ProjectModel).filter(ProjectModel.id == proj.id).first()
+    assert db_proj is not None
+    assert db_proj.is_delete is True
+
+
 
 
 def test_delete_project_as_non_owner(client, user2_headers, test_user, test_user2, db_session):

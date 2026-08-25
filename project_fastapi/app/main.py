@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from app.models import *
 from app.db import Base, engine, get_db
 from sqlalchemy.orm import Session
-from app.core import setup_exception_handlers, settings
+from app.core import setup_exception_handlers, settings, limiter
 from app.routers import api_router
 
 Base.metadata.create_all(bind=engine)
@@ -15,7 +15,9 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
+app.state.limiter = limiter
 setup_exception_handlers(app)
+
 
 app.include_router(api_router)
 

@@ -52,8 +52,9 @@ def register_auth(user_data: UserCreate, request: Request, db: Session = Depends
     status_code=status.HTTP_200_OK,
     response_model=ApiResponse[TokenDataResponse],
     summary="Đăng nhập và nhận JWT Access/Refresh Token",
-    description="Xác thực thông tin email và mật khẩu qua form-data."
+    description="Xác thực thông tin email và mật khẩu qua form-data. Giới hạn tần suất 5 lần / phút."
 )
+@limiter.limit("5/minute")
 def login_auth(request: Request, email: EmailStr = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     user = query_user_by_gmail(email, db=db)
     check_user = True

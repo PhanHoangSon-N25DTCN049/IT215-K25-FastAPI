@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
-from app.models import ProjectModel,ProjectMembersModel, RoleProject
+from app.models import ProjectModel, ProjectMembersModel, RoleProject
 from app.schemas import ProjectData
 from app.core import NotFoundException
 from .query import query_project_member_by_id
+
+
 
 def save_project(project_data: dict, owner_id: int, db: Session):
     project_data["owner_id"] = owner_id
@@ -50,8 +52,10 @@ def update_project(data_update: dict, project: ProjectData, db: Session):
     return project
 
 def del_project(project: ProjectModel, db: Session):
-    db.delete(project)
+    project.is_delete = True
     db.commit()
+
+
     
 def del_user_project(project_id: int, user_id: int, db: Session):
     user = member = db.query(ProjectMembersModel).filter(

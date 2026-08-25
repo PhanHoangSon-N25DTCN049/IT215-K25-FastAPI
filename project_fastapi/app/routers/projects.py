@@ -2,11 +2,11 @@ from fastapi import Depends, APIRouter, Request, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.schemas import ApiResponse, api_response, ProjectCreate, ProjectData, ProjectMemberData, AddUserProject, UpdateProject
+from app.schemas import ApiResponse, api_response, ProjectCreate, ProjectData, ProjectMemberData, AddUserProject, UpdateProject, ActivityLogData
 from app.core import ForbiddenException, NotFoundException, ConflictException, BadRequestException
 from app.db import get_db
 from app.models import ProjectMembersModel, RoleProject
-from app.services import save_project, query_project_join, join_project, update_project, del_project, del_user_project, query_user_by_id, query_all_project_member
+from app.services import save_project, query_project_join, join_project, update_project, del_project, del_user_project, query_user_by_id, query_all_project_member, log_activity, query_project_activity_logs
 from app.dependencies import get_current_user, verify_project_member
 
 
@@ -27,6 +27,13 @@ def create_project_api(
     db: Session = Depends(get_db)
 ):
     new_project = save_project(project_data.model_dump(), int(user_data.get("sub")), db)
+    log_activity(
+        project_id=new_project.id,
+        user_id=int(user_data.get("sub")),
+        action="CREATE_PROJECT",
+        details={"name": new_project.name, "description": new_project.description},
+        db=db
+    )
     
     return api_response(
         request,
@@ -118,6 +125,16 @@ def add_member_project_api(
         raise ConflictException("Người dùng đã là thành viên của dự án")
     
     new_member = join_project(user_data.user_id, project.id, db, user_data.role)
+    log_activity(
+        project_id=project.id,
+        user_id=member.user_id,
+        action="ADD_MEMBER",
+        details={
+            "target_user_id": user_data.user_id,
+            "role": user_data.role.value if hasattr(user_data.role, 'value') else str(user_data.role)
+        },
+        db=db
+    )
     
     return api_response(
         request,
@@ -146,7 +163,15 @@ def update_project_api(
     if member.role != RoleProject.OWNER:
         raise ForbiddenException("Bạn không có quyền sửa đổi dự án")
     
-    project_new = update_project(data_update.model_dump(exclude_unset=True), project, db)
+    update_dict = data_update.model_dump(exclude_unset=True)
+    project_new = update_project(update_dict, project, db)
+    log_activity(
+        project_id=project.id,
+        user_id=member.user_id,
+        action="UPDATE_PROJECT",
+        details=update_dict,
+        db=db
+    )
     
     return api_response(
         request,
@@ -204,6 +229,13 @@ def del_project_member_api(
         raise BadRequestException("Không thể xóa người khởi tạo dự án")
     
     del_user_project(project.id, user_id, db)
+    log_activity(
+        project_id=project.id,
+        user_id=member.user_id,
+        action="REMOVE_MEMBER",
+        details={"target_user_id": user_id},
+        db=db
+    )
     
     return api_response(
         request,
@@ -233,4 +265,35 @@ def get_all_member_api(
         200,
         "Lấy danh sách thành viên thành công",
         list_member
+    )
+
+
+@project_router.get(
+    "/{project_id}/activities",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse[List[ActivityLogData]],
+    summary="Lấy lịch sử thao tác của dự án",
+    description="Chỉ thành viên thuộc dự án mới có quyền xem lịch sử thao tác. Hỗ trợ phân trang."
+)
+def get_project_activities_api(
+    request: Request,
+    limit: int = 20,
+    offset: int = 0,
+    project_data = Depends(verify_project_member),
+    db: Session = Depends(get_db)
+):
+    project, _ = project_data
+    
+    list_activities = query_project_activity_logs(
+        project_id=project.id,
+        db=db,
+        limit=limit,
+        offset=offset
+    )
+    
+    return api_response(
+        request,
+        200,
+        "Lấy lịch sử thao tác thành công",
+        list_activities
     )

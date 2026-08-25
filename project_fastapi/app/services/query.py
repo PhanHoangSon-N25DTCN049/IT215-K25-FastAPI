@@ -27,7 +27,10 @@ def query_user_by_admin(db: Session, name: str = None, email: str = None, status
     return query.all()
 
 def query_project_join(user_id: int, db: Session, search: str = None):
-    query = db.query(ProjectMembersModel).join(ProjectModel).filter(ProjectMembersModel.user_id == user_id)
+    query = db.query(ProjectMembersModel).join(ProjectModel).filter(
+        ProjectMembersModel.user_id == user_id,
+        ProjectModel.is_delete == False
+    )
     if search is not None:
         query = query.filter(ProjectModel.name.ilike(f"%{search}%"))
     
@@ -48,7 +51,12 @@ def query_project_join(user_id: int, db: Session, search: str = None):
     return result
 
 def query_project_by_id(db: Session, id: int, id_user_query: int):
-    project = db.query(ProjectModel).filter(ProjectModel.id == id).first()
+    project = db.query(ProjectModel).filter(
+        ProjectModel.id == id,
+        ProjectModel.is_delete == False
+    ).first()
+    if not project:
+        return None
     
     return ProjectData(
         id=project.id,
@@ -58,6 +66,7 @@ def query_project_by_id(db: Session, id: int, id_user_query: int):
         created_at=project.created_at,
         role_user=RoleProject.OWNER if id_user_query == project.owner_id else RoleProject.MEMBER
     )
+
 
 def query_project_member_by_id(id: int, db:Session):
     return db.query(ProjectMembersModel).filter(ProjectMembersModel.id == id).first()
