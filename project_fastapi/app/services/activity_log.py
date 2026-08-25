@@ -1,14 +1,14 @@
 from sqlalchemy.orm import Session
 from app.models import ActivityLogModel
 from app.schemas import ActivityLogData
-from typing import List, Optional, Dict, Any
+from typing import List, Any
 
 
 def log_activity(
     project_id: int,
     user_id: int,
     action: str,
-    details: Optional[Dict[str, Any]],
+    details: dict[str, Any] | None,
     db: Session
 ) -> ActivityLogModel:
     log_entry = ActivityLogModel(
