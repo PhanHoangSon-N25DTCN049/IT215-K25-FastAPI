@@ -26,7 +26,7 @@ class TaskModel(Base):
     title: Mapped[str] = mapped_column(String(1000), nullable=False)
     description: Mapped[str] = mapped_column(String(1000), nullable=True)
     assignee_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
-    status: Mapped["TaskStatus"] = mapped_column(Enum(TaskStatus), nullable=False)
+    status: Mapped["TaskStatus"] = mapped_column(Enum(TaskStatus), nullable=False, default=TaskStatus.TODO)
     priority: Mapped["TaskPriority"] = mapped_column(Enum(TaskPriority), nullable=False)
     due_date: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

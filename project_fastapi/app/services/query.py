@@ -12,7 +12,7 @@ def query_user_by_gmail(email: str, db:Session):
     user = db.query(UserModel).filter(UserModel.email == email).first()
     if not user:
         return None
-    return user
+    return user  
 
 
 def query_user_by_admin(db: Session, name: str = None, email: str = None, status: bool = None):
@@ -58,3 +58,6 @@ def query_project_by_id(db: Session, id: int, id_user_query: int):
         created_at=project.created_at,
         role_user=RoleProject.OWNER if id_user_query == project.owner_id else RoleProject.MEMBER
     )
+
+def query_project_member_by_id(id: int, db:Session):
+    return db.query(ProjectMembersModel).filter(ProjectMembersModel.id == id).first()

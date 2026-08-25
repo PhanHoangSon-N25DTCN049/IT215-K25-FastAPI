@@ -1,24 +1,23 @@
-from fastapi import FastAPI, Depends, APIRouter, HTTPException, Request, Query
+from fastapi import  Depends, APIRouter, Request
 from sqlalchemy.orm import Session
-from typing import List, Literal
+from typing import List
 
 
 from app.schemas import ApiResponse, api_response, UserData
 from app.core import InvalidInputException
 from app.db import get_db
-from app.models import UserModel
-from app.services import query_user_by_admin
+from app.services import query_user_by_admin, query_user_by_id
 from app.dependencies import allow_admin_only, get_current_user
 
 user_router = APIRouter(prefix="/users", tags=["Users"])
 
 @user_router.get("/me", status_code=200, response_model= ApiResponse[UserData])
-def get_me(request: Request, user_data: UserModel = Depends(get_current_user)):
+def get_me(request: Request, user_data: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     return api_response(
         request,
         200,
         message="Lấy thông tin thành công",
-        data=user_data
+        data=query_user_by_id(user_data.get("sub"), db)
     )
     
 @user_router.get("", status_code=200, dependencies=[Depends(allow_admin_only)], response_model=ApiResponse[List[UserData]])

@@ -22,6 +22,7 @@ class UserModel(Base):
     role: Mapped[RoleUser] = mapped_column(Enum(RoleUser),default=RoleUser.USER)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    
     refresh_token: Mapped[str] = mapped_column(String(1000), nullable=True)
     is_revoked: Mapped[bool] = mapped_column(Boolean, default=False)
     

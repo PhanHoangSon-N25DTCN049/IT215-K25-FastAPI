@@ -1,5 +1,5 @@
 from app.db import Base
-from sqlalchemy import String, Integer, DateTime, func, ForeignKey, Enum
+from sqlalchemy import String, Integer, DateTime, func, ForeignKey, Enum, UniqueConstraint
 import enum
 from typing import List, TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -29,10 +29,13 @@ class ProjectModel(Base):
 
 class ProjectMembersModel(Base):
     __tablename__ = "project_members"
+    __table_args__ = (
+        UniqueConstraint("project_id", "user_id"),
+    )
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(Integer, ForeignKey("projects.id"), nullable=False)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"),unique= True, nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     role: Mapped["RoleProject"] = mapped_column(Enum(RoleProject), nullable=False)
     joined_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     

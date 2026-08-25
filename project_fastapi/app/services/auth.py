@@ -11,11 +11,6 @@ def register(user_data: dict, db: Session):
 
 
 
-def validate_password(password: str):
-    if len(password) < 6:
-        return False
-    return True
-
 def save_refresh_token(user: UserModel, refresh_token: str, db: Session):
     setattr(user, "refresh_token", refresh_token)
     setattr(user, "is_revoked", False)

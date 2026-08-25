@@ -3,17 +3,18 @@ from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError, PyJWTError
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 
 from app.core import ForbiddenException, settings, UnauthorizedException, NotFoundException
 from app.db import get_db
-from app.models import RoleUser, UserModel, ProjectMembersModel, ProjectModel
-from app.services import query_user_by_id
+from app.models import RoleUser, ProjectMembersModel, ProjectModel, TaskModel
+from app.services import get_task_by_id
+
 
 security = HTTPBearer()
 
 
 def get_current_user(
-    db: Session = Depends(get_db),
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
     try:
@@ -29,25 +30,29 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = query_user_by_id(payload.get("sub"), db)
-    if not user:
-        return None
-
-    return user
+    
+    if not payload.get("sub"):
+        raise UnauthorizedException(
+            message="Token không hợp lệ (thiếu định danh người dùng)",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+        
+    return payload
 
 
 class RoleChecker:
     """
     Sử dụng cơ chế Parameterized Dependency để kiểm tra quyền truy cập động.
+    trả về dict bao gồm id và role
     """
 
     def __init__(self, allowed_roles: list[str]):
         self.allowed_roles = allowed_roles
 
     def __call__(
-        self, current_user: UserModel = Depends(get_current_user)
-    ) -> UserModel:
-        if current_user.role not in self.allowed_roles:
+        self, current_user: dict = Depends(get_current_user)
+    ) -> dict:
+        if current_user.get("role") not in self.allowed_roles:
             raise ForbiddenException(message="Quyền truy cập bị từ chối.")
         return current_user
 
@@ -59,30 +64,79 @@ allow_user_and_admin = RoleChecker([RoleUser.USER, RoleUser.ADMIN])
 def verify_project_member(
     project_id: int,
     db: Session = Depends(get_db),
-    user: UserModel = Depends(get_current_user)
-):
+    user: dict = Depends(get_current_user)
+) -> tuple[ProjectModel, ProjectMembersModel]:
     """_summary_
 
     Args:
-        project_id (int): Nhận vào ID dự án
-        user: dựa vào token để lấy user đang thực hiện hàm qua get_current_user
+        project_id (int): nhận vào project id
+        db (Session, optional): tạo phiên làm việc db
+        user (dict, optional): lấy thông tin id user hiện tại bao gồm id và role
 
+    Raises:
+        NotFoundException: kiểm tra dự án tồn tại
+        ForbiddenException: kiểm tra quyền truy cập nếu là member hoặc owner thì cho qua
 
     Returns:
-        trả về project và user đang thực hiện hàm
+        tuple[ProjectModel, ProjectMembersModel]: trả về tuple project đang làm việc và thông tin user trong project
     """
+    user_id = int(user.get("sub"))
     
-    project = db.query(ProjectModel).filter(ProjectModel.id == project_id).first()
+    result = db.query(ProjectModel, ProjectMembersModel)\
+        .outerjoin(
+            ProjectMembersModel, 
+            (ProjectMembersModel.project_id == ProjectModel.id) & 
+            (ProjectMembersModel.user_id == user_id)
+        )\
+        .filter(ProjectModel.id == project_id)\
+        .first()
     
-    if not project:
+    if not result:
         raise NotFoundException("Dự án không tồn tại")
     
-    member = db.query(ProjectMembersModel).filter(
-        ProjectMembersModel.project_id == project_id,
-        ProjectMembersModel.user_id == user.id
-    ).first()
+    project, member = result
     
     if not member:
         raise ForbiddenException("Bạn không có quyền truy cập dự án này")
     
     return (project, member)
+
+def verify_task_member(
+    task_id: int,
+    db: Session = Depends(get_db),
+    user: dict = Depends(get_current_user)
+)-> tuple[TaskModel, ProjectMembersModel]:
+    """
+
+    Args:
+        task_id (int): nhận vào task_id
+        db (Session): kích hoạt phiên làm việc database
+        user (dict, optional): lấy thông tin id user hiện tại bao gồm id và role
+
+    Raises:
+        NotFoundException: khi không tồn tại ta
+        ForbiddenException: khi không phải là thành viên dự án
+
+    Returns:
+        tuple[TaskModel, ProjectMembersModel]: trả về tuple task đang làm việc và thông tin user trong project
+    """
+    user_id = int(user.get("sub"))
+    
+    result = db.query(TaskModel, ProjectMembersModel)\
+        .outerjoin(
+            ProjectMembersModel,
+            (ProjectMembersModel.project_id == TaskModel.project_id) & 
+            (ProjectMembersModel.user_id == user_id)
+        )\
+        .filter(TaskModel.id == task_id)\
+        .first()
+        
+    if not result:
+        raise NotFoundException("Task không tồn tại")
+        
+    task, member = result
+    
+    if not member:
+        raise ForbiddenException("Bạn không có quyền truy cập vào task này")
+        
+    return (task, member)

@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Request, Form
+from fastapi import APIRouter, Depends, Request, Form
 from sqlalchemy.orm import Session
 import jwt
 from jwt.exceptions import ExpiredSignatureError, PyJWTError, InvalidTokenError
+from pydantic import EmailStr
 
 from app.db import get_db
 from app.core import *
 from app.schemas import ApiResponse, UserCreate, api_response, UserData, TokenDataResponse, RefreshRequest
-from app.services import query_user_by_gmail, register, validate_password, save_refresh_token, query_user_by_id
+from app.services import query_user_by_gmail, register, save_refresh_token, query_user_by_id
 from app.models import RoleUser
 
 
@@ -19,9 +20,6 @@ def register_auth(user_data: UserCreate, request: Request, db: Session = Depends
     
     if query_user_by_gmail(user_data.email, db):
         raise ConflictException(message="Email đã tồn tại")
-    
-    if not validate_password(user_data.password):
-        raise InvalidInputException()
     
     new_user = {
         "email": user_data.email,
@@ -45,7 +43,7 @@ def register_auth(user_data: UserCreate, request: Request, db: Session = Depends
 
 
 @auth_router.post("/login", status_code=200, response_model=ApiResponse[TokenDataResponse])
-def login_auth( request: Request,email = Form(), password = Form(min_length=6), db: Session = Depends(get_db)):
+def login_auth( request: Request, email:EmailStr = Form(...), password = Form(...), db: Session = Depends(get_db)):
     user = query_user_by_gmail(email, db=db)
     check_user = True
     if user:
@@ -55,9 +53,9 @@ def login_auth( request: Request,email = Form(), password = Form(min_length=6), 
         raise UnauthorizedException("Thông tin đăng nhập không đúng")
     
     if not user.is_active:
-        raise ForbiddenException("Tài khoản của bạn đã bị khóa")
+        raise BadRequestException("Tài khoản của bạn đã bị khóa")
     
-    refresh_token = generate_token(user, settings.REFRESH_TOKEN_EXPIRE_MINUTES, settings.REFRESH_SECRET_KEY)
+    refresh_token = generate_refresh_token(user)
     
     save_refresh_token(user, refresh_token, db)
     
@@ -66,7 +64,7 @@ def login_auth( request: Request,email = Form(), password = Form(min_length=6), 
         200,
         "Đăng nhập thành công",
         TokenDataResponse(
-            access_token=generate_token(user, settings.ACCESS_TOKEN_EXPIRE_MINUTES, settings.SECRET_KEY),
+            access_token=generate_access_token(user),
             refresh_token=refresh_token,
             token_type="bearer"
         )
@@ -88,7 +86,7 @@ def refresh_access_token(request: Request, data: RefreshRequest, db: Session = D
             201,
             "Yêu cầu cấp access token thành công",
             TokenDataResponse(
-                access_token=generate_token(user, settings.ACCESS_TOKEN_EXPIRE_MINUTES, settings.SECRET_KEY),
+                access_token=generate_access_token(user),
                 refresh_token= data.refresh_token,
                 token_type="bearer"
             )
