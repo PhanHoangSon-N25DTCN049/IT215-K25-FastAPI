@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-24T23:54:56.578562",
+  "timestamp": "2026-08-25T13:48:05.934878",
   "total": 33,
   "passed": 33,
   "failed": 0,
@@ -42,10 +42,10 @@
           "full_name": "Tester One",
           "role": "user",
           "is_active": true,
-          "created_at": "2026-08-24T16:54:55"
+          "created_at": "2026-08-25T06:48:04"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:55.059631",
+        "timestamp": "2026-08-25T13:48:04.381572",
         "path": "/auth/register"
       }
     },
@@ -69,7 +69,7 @@
         "data": null,
         "error": "Conflict",
         "path": "/auth/register",
-        "timestamp": "2026-08-24T23:54:55.063812"
+        "timestamp": "2026-08-25T13:48:04.398250"
       }
     },
     {
@@ -105,7 +105,7 @@
           }
         ],
         "path": "/auth/register",
-        "timestamp": "2026-08-24T23:54:55.068196"
+        "timestamp": "2026-08-25T13:48:04.401635"
       }
     },
     {
@@ -141,7 +141,7 @@
           }
         ],
         "path": "/auth/register",
-        "timestamp": "2026-08-24T23:54:55.070987"
+        "timestamp": "2026-08-25T13:48:04.429799"
       }
     },
     {
@@ -158,12 +158,12 @@
         "statusCode": 200,
         "message": "Đăng nhập thành công",
         "data": {
-          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc1OTEwOTUuMjkyMjZ9.WhqNn5mZ7QzAaSrYvN_zIPv27hpY1z0_esQ1887BjhM",
-          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3ODQ5Njk1LjI5MDk3fQ.DjMSLLQjR5Dm8cEGnWDmgvfpQVp_2yRrX88y3-u28IY",
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc2NDEwODQuNjQ2MTE2fQ.0hyqm5McZWBIK5imdL-ejqGwdNMQ2YF_E69R8JnxkfU",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3ODk5Njg0LjY0NDA3N30.Z9bH4_UssnmNlrpzc3M_oNbA1829qsL7jsN0_35AOVg",
           "token_type": "bearer"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:55.293447",
+        "timestamp": "2026-08-25T13:48:04.647753",
         "path": "/auth/login"
       }
     },
@@ -183,7 +183,7 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/login",
-        "timestamp": "2026-08-24T23:54:55.575972"
+        "timestamp": "2026-08-25T13:48:04.888023"
       }
     },
     {
@@ -202,7 +202,7 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/login",
-        "timestamp": "2026-08-24T23:54:55.579799"
+        "timestamp": "2026-08-25T13:48:04.915231"
       }
     },
     {
@@ -221,7 +221,7 @@
         "data": null,
         "error": "Bad Request",
         "path": "/auth/login",
-        "timestamp": "2026-08-24T23:54:56.005905"
+        "timestamp": "2026-08-25T13:48:05.328944"
       }
     },
     {
@@ -238,12 +238,12 @@
         "statusCode": 201,
         "message": "Yêu cầu cấp access token thành công",
         "data": {
-          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc1OTEwOTYuMDEwOTkzfQ.X7nrZc9OaZg2f2qE2IUOdS2PzJGoGtCFUeQ2AUKb5fc",
-          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3ODQ5Njk1LjI5MDk3fQ.DjMSLLQjR5Dm8cEGnWDmgvfpQVp_2yRrX88y3-u28IY",
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc2NDEwODUuMzMzNDl9.aL0fuujvl2To9aFSC4OFZBN_YLnEDpUXTcXAJ389lP0",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3ODk5Njg0LjY0NDA3N30.Z9bH4_UssnmNlrpzc3M_oNbA1829qsL7jsN0_35AOVg",
           "token_type": "bearer"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.011242",
+        "timestamp": "2026-08-25T13:48:05.333716",
         "path": "/auth/refresh"
       }
     },
@@ -263,7 +263,7 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/refresh",
-        "timestamp": "2026-08-24T23:54:56.015377"
+        "timestamp": "2026-08-25T13:48:05.338445"
       }
     },
     {
@@ -285,10 +285,10 @@
           "full_name": "Tester One",
           "role": "user",
           "is_active": true,
-          "created_at": "2026-08-24T16:54:55"
+          "created_at": "2026-08-25T06:48:04"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.019329",
+        "timestamp": "2026-08-25T13:48:05.343184",
         "path": "/users/me"
       }
     },
@@ -308,7 +308,7 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/users/me",
-        "timestamp": "2026-08-24T23:54:56.021473"
+        "timestamp": "2026-08-25T13:48:05.345904"
       }
     },
     {
@@ -327,7 +327,7 @@
         "data": null,
         "error": "Forbidden",
         "path": "/users",
-        "timestamp": "2026-08-24T23:54:56.025962"
+        "timestamp": "2026-08-25T13:48:05.350220"
       }
     },
     {
@@ -350,7 +350,7 @@
             "full_name": "Tester One",
             "role": "user",
             "is_active": true,
-            "created_at": "2026-08-24T16:54:55"
+            "created_at": "2026-08-25T06:48:04"
           },
           {
             "id": 2,
@@ -358,7 +358,7 @@
             "full_name": "Locked User",
             "role": "user",
             "is_active": false,
-            "created_at": "2026-08-24T16:54:55"
+            "created_at": "2026-08-25T06:48:05"
           },
           {
             "id": 3,
@@ -366,11 +366,11 @@
             "full_name": "Admin Master",
             "role": "admin",
             "is_active": true,
-            "created_at": "2026-08-24T16:54:56"
+            "created_at": "2026-08-25T06:48:05"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.242632",
+        "timestamp": "2026-08-25T13:48:05.569996",
         "path": "/users"
       }
     },
@@ -395,11 +395,11 @@
           "name": "Dự án N25DTCN049",
           "description": "Dự án môn IT215",
           "owner_id": 1,
-          "created_at": "2026-08-24T16:54:56",
+          "created_at": "2026-08-25T06:48:05",
           "role_user": "owner"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.249841",
+        "timestamp": "2026-08-25T13:48:05.577838",
         "path": "/project"
       }
     },
@@ -422,12 +422,12 @@
             "name": "Dự án N25DTCN049",
             "description": "Dự án môn IT215",
             "owner_id": 1,
-            "created_at": "2026-08-24T16:54:56",
+            "created_at": "2026-08-25T06:48:05",
             "role_user": "owner"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.254929",
+        "timestamp": "2026-08-25T13:48:05.583830",
         "path": "/project"
       }
     },
@@ -450,12 +450,12 @@
             "name": "Dự án N25DTCN049",
             "description": "Dự án môn IT215",
             "owner_id": 1,
-            "created_at": "2026-08-24T16:54:56",
+            "created_at": "2026-08-25T06:48:05",
             "role_user": "owner"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.259926",
+        "timestamp": "2026-08-25T13:48:05.589121",
         "path": "/project"
       }
     },
@@ -477,11 +477,11 @@
           "name": "Dự án N25DTCN049",
           "description": "Dự án môn IT215",
           "owner_id": 1,
-          "created_at": "2026-08-24T16:54:56",
+          "created_at": "2026-08-25T06:48:05",
           "role_user": "owner"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.264691",
+        "timestamp": "2026-08-25T13:48:05.594694",
         "path": "/project/1"
       }
     },
@@ -501,7 +501,7 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1",
-        "timestamp": "2026-08-24T23:54:56.491936"
+        "timestamp": "2026-08-25T13:48:05.809402"
       }
     },
     {
@@ -525,10 +525,10 @@
           "user_id": 4,
           "project_id": 1,
           "role": "member",
-          "joined_at": "2026-08-24T16:54:56"
+          "joined_at": "2026-08-25T06:48:05"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.509750",
+        "timestamp": "2026-08-25T13:48:05.846812",
         "path": "/project/1/member"
       }
     },
@@ -547,11 +547,11 @@
       },
       "response": {
         "statusCode": 403,
-        "message": "Bạn không có quyền thực hiện hành động này",
+        "message": "Chỉ chủ dự án mới có quyền thêm thành viên",
         "data": null,
         "error": "Forbidden",
         "path": "/project/1/member",
-        "timestamp": "2026-08-24T23:54:56.514613"
+        "timestamp": "2026-08-25T13:48:05.855950"
       }
     },
     {
@@ -575,7 +575,7 @@
           "name": "Dự án N25DTCN049 - Cập nhật",
           "description": "Mô tả mới",
           "owner_id": 1,
-          "created_at": "2026-08-24T16:54:56"
+          "created_at": "2026-08-25T06:48:05"
         },
         "error": null,
         "path": "/project/1"
@@ -599,7 +599,7 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1",
-        "timestamp": "2026-08-24T23:54:56.524522"
+        "timestamp": "2026-08-25T13:48:05.871333"
       }
     },
     {
@@ -618,7 +618,7 @@
         "data": null,
         "error": "Not Found",
         "path": "/project/1/members/999999",
-        "timestamp": "2026-08-24T23:54:56.528950"
+        "timestamp": "2026-08-25T13:48:05.876473"
       }
     },
     {
@@ -636,7 +636,7 @@
         "message": "Xóa thành viên thành công",
         "data": null,
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.534097",
+        "timestamp": "2026-08-25T13:48:05.883019",
         "path": "/project/1/members/4"
       }
     },
@@ -656,7 +656,7 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1",
-        "timestamp": "2026-08-24T23:54:56.538887"
+        "timestamp": "2026-08-25T13:48:05.889845"
       }
     },
     {
@@ -686,10 +686,10 @@
           "status": "todo",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-24T16:54:56"
+          "created_at": "2026-08-25T06:48:05"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.545151",
+        "timestamp": "2026-08-25T13:48:05.897208",
         "path": "/project/1/tasks"
       }
     },
@@ -717,7 +717,7 @@
               "status": "todo",
               "priority": "high",
               "due_date": "2026-12-31T23:59:59",
-              "created_at": "2026-08-24T16:54:56"
+              "created_at": "2026-08-25T06:48:05"
             }
           ],
           "meta": {
@@ -728,7 +728,7 @@
           }
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.553532",
+        "timestamp": "2026-08-25T13:48:05.907646",
         "path": "/project/1/tasks"
       }
     },
@@ -754,10 +754,10 @@
           "status": "todo",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-24T16:54:56"
+          "created_at": "2026-08-25T06:48:05"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.559797",
+        "timestamp": "2026-08-25T13:48:05.913291",
         "path": "/tasks/1"
       }
     },
@@ -786,10 +786,10 @@
           "status": "in_progress",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-24T16:54:56"
+          "created_at": "2026-08-25T06:48:05"
         },
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.566014",
+        "timestamp": "2026-08-25T13:48:05.920175",
         "path": "/tasks/1"
       }
     },
@@ -808,7 +808,7 @@
         "message": "Xóa task thành công",
         "data": null,
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.571472",
+        "timestamp": "2026-08-25T13:48:05.925542",
         "path": "/tasks/1"
       }
     },
@@ -827,7 +827,7 @@
         "message": "Xóa dự án thành công",
         "data": null,
         "error": null,
-        "timestamp": "2026-08-24T23:54:56.577761",
+        "timestamp": "2026-08-25T13:48:05.933037",
         "path": "/project/1"
       }
     }

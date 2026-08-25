@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, Form
+from fastapi import APIRouter, Depends, Request, Form, status
 from sqlalchemy.orm import Session
 import jwt
 from jwt.exceptions import ExpiredSignatureError, PyJWTError, InvalidTokenError
@@ -11,11 +11,16 @@ from app.services import query_user_by_gmail, register, save_refresh_token, quer
 from app.models import RoleUser
 
 
-
-
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 
-@auth_router.post("/register", status_code=201, response_model=ApiResponse[UserData])
+
+@auth_router.post(
+    "/register",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ApiResponse[UserData],
+    summary="Đăng ký tài khoản người dùng mới",
+    description="Tạo tài khoản mới với email, password tối thiểu 6 ký tự và họ tên."
+)
 def register_auth(user_data: UserCreate, request: Request, db: Session = Depends(get_db)):
     
     if query_user_by_gmail(user_data.email, db):
@@ -42,8 +47,14 @@ def register_auth(user_data: UserCreate, request: Request, db: Session = Depends
     )
 
 
-@auth_router.post("/login", status_code=200, response_model=ApiResponse[TokenDataResponse])
-def login_auth( request: Request, email:EmailStr = Form(...), password = Form(...), db: Session = Depends(get_db)):
+@auth_router.post(
+    "/login",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse[TokenDataResponse],
+    summary="Đăng nhập và nhận JWT Access/Refresh Token",
+    description="Xác thực thông tin email và mật khẩu qua form-data."
+)
+def login_auth(request: Request, email: EmailStr = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     user = query_user_by_gmail(email, db=db)
     check_user = True
     if user:
@@ -70,12 +81,18 @@ def login_auth( request: Request, email:EmailStr = Form(...), password = Form(..
         )
     )
 
-@auth_router.post("/refresh", status_code=201, response_model=ApiResponse[TokenDataResponse])
+@auth_router.post(
+    "/refresh",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ApiResponse[TokenDataResponse],
+    summary="Cấp mới Access Token bằng Refresh Token",
+    description="Gửi Refresh Token còn hạn và chưa bị thu hồi để nhận Access Token mới."
+)
 def refresh_access_token(request: Request, data: RefreshRequest, db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(data.refresh_token, settings.REFRESH_SECRET_KEY, [settings.ALGORITHM])
         user = query_user_by_id(payload.get("sub"), db)
-        if user.refresh_token != data.refresh_token or user.is_revoked == True:
+        if not user or user.refresh_token != data.refresh_token or user.is_revoked == True:
             raise UnauthorizedException(
                 message="Token không còn hợp lệ",
                 headers={"WWW-Authenticate": "Bearer"}
@@ -102,5 +119,3 @@ def refresh_access_token(request: Request, data: RefreshRequest, db: Session = D
                 message="Không thể xác thực thông tin",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        
-

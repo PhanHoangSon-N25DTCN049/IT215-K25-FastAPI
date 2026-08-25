@@ -1,4 +1,4 @@
-from fastapi import  Depends, APIRouter, Request, Query, status
+from fastapi import Depends, APIRouter, Request, Query, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -8,15 +8,24 @@ from .projects import project_router
 from app.dependencies import verify_project_member, verify_task_member
 from app.models import ProjectModel, ProjectMembersModel, TaskPriority, TaskStatus, TaskModel, RoleProject
 from app.services import create_task, get_all_task, get_task_by_id, update_task, del_task
-from app.core import NotFoundException, ForbiddenException, BadRequestException
+from app.core import ForbiddenException, BadRequestException
 
 task_router = APIRouter(prefix="/tasks", tags=["Task"])
 
-@project_router.post("/{project_id}/tasks", status_code=201, response_model=ApiResponse[TaskData])
-def create_task_api(request: Request,
-                    task_data: TaskCreate,
-                    user_data: tuple[ProjectModel, ProjectMembersModel] = Depends(verify_project_member),
-                    db: Session = Depends(get_db)):
+
+@project_router.post(
+    "/{project_id}/tasks",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ApiResponse[TaskData],
+    summary="Tạo công việc (task) mới trong dự án",
+    description="Thành viên dự án tạo task mới với title, description, due_date, priority. Tự động gán assignee mặc định cho người tạo."
+)
+def create_task_api(
+    request: Request,
+    task_data: TaskCreate,
+    user_data: tuple[ProjectModel, ProjectMembersModel] = Depends(verify_project_member),
+    db: Session = Depends(get_db)
+):
     project, member = user_data
     
     new_task = {
@@ -36,17 +45,21 @@ def create_task_api(request: Request,
         "Tạo task thành công",
         task
     )
-    
-from fastapi import Query
-from typing import Optional
 
-@project_router.get("/{project_id}/tasks", status_code=200, response_model=ApiResponse[ListTaskData])
+
+@project_router.get(
+    "/{project_id}/tasks",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse[ListTaskData],
+    summary="Lấy danh sách task trong dự án (Filter, Search, Sort & Phân trang)",
+    description="Chỉ thành viên dự án mới được lấy danh sách task. Hỗ trợ lọc theo user_id, status (TODO, IN_PROGRESS, DONE), priority (LOW, MEDIUM, HIGH), tìm kiếm theo title, phân trang (page, size) và sắp xếp (sort_by, sort_order)."
+)
 def get_all_task_api(
     request: Request, 
-    user_id: Optional[int] = Query(None, description="Lọc theo ID người được giao"),
-    status: Optional[TaskStatus] = Query(None, description="Lọc theo trạng thái (TODO, IN_PROGRESS, DONE)"),
-    priority: Optional[TaskPriority] = Query(None, description="Lọc theo độ ưu tiên (LOW, MEDIUM, HIGH)"),
-    title: Optional[str] = Query(None, description="Tìm kiếm theo tiêu đề"),
+    user_id: int | None = Query(None, description="Lọc theo ID người được giao"),
+    status: TaskStatus | None = Query(None, description="Lọc theo trạng thái (TODO, IN_PROGRESS, DONE)"),
+    priority: TaskPriority | None = Query(None, description="Lọc theo độ ưu tiên (LOW, MEDIUM, HIGH)"),
+    title: str | None = Query(None, description="Tìm kiếm theo tiêu đề"),
     page: int = Query(1, ge=1, description="Trang hiện tại (bắt đầu từ 1)"),
     size: int = Query(10, ge=1, le=100, description="Số lượng task trên mỗi trang"),
     sort_by: str = Query("created_at", description="Trường cần sắp xếp (created_at hoặc due_date)"),
@@ -54,9 +67,8 @@ def get_all_task_api(
     user_data: tuple[ProjectModel, ProjectMembersModel] = Depends(verify_project_member),
     db: Session = Depends(get_db)
 ):
-    project,_ = user_data
+    project, _ = user_data
     
-
     list_task = get_all_task(
         project_id=project.id, 
         db=db,
@@ -73,16 +85,23 @@ def get_all_task_api(
     return api_response(
         request,
         200,
-        f"Lấy danh sách Task thành công",
+        "Lấy danh sách Task thành công",
         list_task
     )
-    
-@task_router.get("/{task_id}", status_code=200, response_model=ApiResponse[TaskData])
-def get_task_api(request: Request,
-                 task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member)
-                 ):
-    
-    task,_ = task_and_user
+
+
+@task_router.get(
+    "/{task_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse[TaskData],
+    summary="Xem chi tiết công việc (task)",
+    description="Chỉ thành viên thuộc dự án chứa task mới được quyền xem chi tiết. Chặn người ngoài bằng 403 Forbidden."
+)
+def get_task_api(
+    request: Request,
+    task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member)
+):
+    task, _ = task_and_user
     
     return api_response(
         request,
@@ -90,16 +109,22 @@ def get_task_api(request: Request,
         "Chi tiết task",
         task
     )
-    
-    
-    
-@task_router.patch("/{task_id}", status_code=200, response_model=ApiResponse[TaskData])
-def update_task_api(request: Request,
-                    task_data: TaskUpdate,
-                    task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
-                    db:Session = Depends(get_db)):
-    
-    task,member = task_and_user
+
+
+@task_router.patch(
+    "/{task_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse[TaskData],
+    summary="Cập nhật thông tin task",
+    description="Chỉ Assignee hoặc Project Owner mới có quyền cập nhật task. Nếu đổi Assignee, người mới bắt buộc phải là thành viên trong dự án."
+)
+def update_task_api(
+    request: Request,
+    task_data: TaskUpdate,
+    task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
+    db: Session = Depends(get_db)
+):
+    task, member = task_and_user
     if task.assignee_id != member.user_id and member.role != RoleProject.OWNER:
         raise ForbiddenException("Bạn không có quyền chỉnh sửa task này")
     
@@ -122,12 +147,20 @@ def update_task_api(request: Request,
         task_update
     )
 
-@task_router.delete("/{task_id}", status_code=200, response_model=ApiResponse)
-def del_task_api(request: Request,
-                 task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
-                 db: Session = Depends(get_db)):
-    
-    task,member = task_and_user
+
+@task_router.delete(
+    "/{task_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=ApiResponse,
+    summary="Xóa công việc (task)",
+    description="Chỉ Project Owner mới có quyền xóa task. Thành viên thường hoặc Assignee không có quyền xóa."
+)
+def del_task_api(
+    request: Request,
+    task_and_user: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
+    db: Session = Depends(get_db)
+):
+    task, member = task_and_user
     
     if member.role != RoleProject.OWNER:
         raise ForbiddenException("Bạn không có quyền xóa task này")

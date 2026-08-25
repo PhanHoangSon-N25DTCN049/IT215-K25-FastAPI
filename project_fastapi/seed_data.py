@@ -72,7 +72,7 @@ def seed_data():
 
         # 3. Seed ProjectMembers
         for project in projects:
-            # Gán quyền OWNER
+            # Gán quyền OWNER cho user1
             owner_member = db.query(ProjectMembersModel).filter(
                 ProjectMembersModel.project_id == project.id,
                 ProjectMembersModel.user_id == users[0].id,
@@ -85,18 +85,19 @@ def seed_data():
                 )
                 db.add(owner_member)
 
-            # Gán quyền MEMBER
-            normal_member = db.query(ProjectMembersModel).filter(
-                ProjectMembersModel.project_id == project.id,
-                ProjectMembersModel.user_id == users[1].id,
-            ).first()
-            if not normal_member:
-                normal_member = ProjectMembersModel(
-                    user_id=users[1].id,
-                    project_id=project.id,
-                    role=RoleProject.MEMBER,
-                )
-                db.add(normal_member)
+            # Gán quyền MEMBER cho user2, user3
+            for u in [users[1], users[2]]:
+                normal_member = db.query(ProjectMembersModel).filter(
+                    ProjectMembersModel.project_id == project.id,
+                    ProjectMembersModel.user_id == u.id,
+                ).first()
+                if not normal_member:
+                    normal_member = ProjectMembersModel(
+                        user_id=u.id,
+                        project_id=project.id,
+                        role=RoleProject.MEMBER,
+                    )
+                    db.add(normal_member)
 
         db.commit()
 

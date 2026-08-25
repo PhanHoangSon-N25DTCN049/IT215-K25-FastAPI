@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 from typing import List
 
@@ -6,15 +6,15 @@ from app.models import TaskPriority, TaskStatus
 
 
 class TaskCreate(BaseModel):
-    title: str
-    description: str
-    due_date: datetime
-    priority: TaskPriority
+    title: str = Field(..., min_length=1, max_length=255)
+    description: str | None = Field(None, max_length=2000)
+    due_date: datetime | None = None
+    priority: TaskPriority = Field(default=TaskPriority.MEDIUM)
     
     
 class TaskUpdate(BaseModel):
-    title: str | None = Field(None, max_length=1000)
-    description: str | None = Field(None, max_length=1000)
+    title: str | None = Field(None, min_length=1, max_length=255)
+    description: str | None = Field(None, max_length=2000)
     assignee_id: int | None = None
     status: TaskStatus | None = None
     priority: TaskPriority | None = None
@@ -31,9 +31,8 @@ class TaskData(BaseModel):
     due_date: datetime | None = None
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
         
 class ListTaskData(BaseModel):
     data: List[TaskData]
-    meta: dict
+    meta: dict

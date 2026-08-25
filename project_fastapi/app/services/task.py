@@ -53,7 +53,7 @@ def get_all_task(project_id: int,
 
     total_items = query.count()
 
-
+ 
     skip = (page - 1) * size
     tasks = query.offset(skip).limit(size).all()
 

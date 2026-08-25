@@ -1,5 +1,5 @@
 from app.db import Base
-from sqlalchemy import String, Integer, DateTime, func, ForeignKey, Enum, UniqueConstraint
+from sqlalchemy import String, Integer, DateTime, func, ForeignKey, Enum, UniqueConstraint, BOOLEAN
 import enum
 from typing import List, TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -20,6 +20,7 @@ class ProjectModel(Base):
     description: Mapped[str] = mapped_column(String(1000), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     owner_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    is_delete: Mapped[bool] = mapped_column(BOOLEAN, default=False)
     
     owner: Mapped["UserModel"] = relationship(back_populates="project")
     project_member: Mapped[List["ProjectMembersModel"]] = relationship(back_populates="project", cascade="all, delete-orphan")
