@@ -11,8 +11,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     description="RESTful API Backend cho hệ thống Quản lý Dự án và Công việc (Project & Task Management) xây dựng bằng FastAPI, SQLAlchemy và MySQL.",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    docs_url="/docs"
 )
 
 app.state.limiter = limiter

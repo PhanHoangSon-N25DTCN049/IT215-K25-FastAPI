@@ -1,0 +1,1395 @@
+{
+  "timestamp": "2026-08-26T15:25:21.502364",
+  "total_tests": 50,
+  "passed": 47,
+  "failed": 0,
+  "bugs_found": 3,
+  "pass_rate": "94.00%",
+  "results": [
+    {
+      "category": "Health Check",
+      "test_id": "TC-HLT-001",
+      "name": "Health check hệ thống & DB",
+      "method": "GET",
+      "endpoint": "/",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "DB kết nối tốt, trả về 200 OK",
+      "payload": null,
+      "response": {
+        "message": "Kết nối database Thành công"
+      },
+      "elapsed_ms": 28.52
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-001",
+      "name": "Đăng ký tài khoản hợp lệ",
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Tạo tài khoản thành công",
+      "payload": {
+        "email": "qa_owner@example.com",
+        "password": "Password123!",
+        "full_name": "QA Project Owner"
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Tạo tài khoản thành công",
+        "data": {
+          "id": 1,
+          "email": "qa_owner@example.com",
+          "full_name": "QA Project Owner",
+          "role": "user",
+          "is_active": true,
+          "created_at": "2026-08-26T08:25:19"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:19.773042",
+        "path": "/auth/register"
+      },
+      "elapsed_ms": 250.14
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-002",
+      "name": "Đăng ký trùng email",
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "expected_status": 409,
+      "actual_status": 409,
+      "status": "PASS",
+      "details": "Bắt lỗi 409 Conflict chính xác",
+      "payload": {
+        "email": "qa_owner@example.com",
+        "password": "Password123!",
+        "full_name": "QA Project Owner"
+      },
+      "response": {
+        "statusCode": 409,
+        "message": "Email đã tồn tại",
+        "data": null,
+        "error": "Conflict",
+        "path": "/auth/register",
+        "timestamp": "2026-08-26T15:25:19.777180"
+      },
+      "elapsed_ms": 3.35
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-003",
+      "name": "Đăng ký sai định dạng email",
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "expected_status": 422,
+      "actual_status": 422,
+      "status": "PASS",
+      "details": "Pydantic EmailStr validation bắt lỗi 422",
+      "payload": {
+        "email": "not-an-email",
+        "password": "Password123!",
+        "full_name": "Bad Email"
+      },
+      "response": {
+        "statusCode": 422,
+        "message": "Lỗi dữ liệu đầu vào",
+        "data": null,
+        "error": [
+          {
+            "type": "value_error",
+            "loc": [
+              "body",
+              "email"
+            ],
+            "msg": "value is not a valid email address: An email address must have an @-sign.",
+            "input": "not-an-email",
+            "ctx": {
+              "reason": "An email address must have an @-sign."
+            }
+          }
+        ],
+        "path": "/auth/register",
+        "timestamp": "2026-08-26T15:25:19.780252"
+      },
+      "elapsed_ms": 3.08
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-004",
+      "name": "Đăng ký mật khẩu < 6 ký tự",
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "expected_status": 422,
+      "actual_status": 422,
+      "status": "PASS",
+      "details": "Pydantic Field(min_length=6) bắt lỗi 422",
+      "payload": {
+        "email": "short_pwd@example.com",
+        "password": "123",
+        "full_name": "Short Pwd"
+      },
+      "response": {
+        "statusCode": 422,
+        "message": "Lỗi dữ liệu đầu vào",
+        "data": null,
+        "error": [
+          {
+            "type": "string_too_short",
+            "loc": [
+              "body",
+              "password"
+            ],
+            "msg": "String should have at least 6 characters",
+            "input": "123",
+            "ctx": {
+              "min_length": 6
+            }
+          }
+        ],
+        "path": "/auth/register",
+        "timestamp": "2026-08-26T15:25:19.782807"
+      },
+      "elapsed_ms": 2.36
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-005",
+      "name": "Đăng ký thiếu trường bắt buộc",
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "expected_status": 422,
+      "actual_status": 422,
+      "status": "PASS",
+      "details": "Bắt lỗi thiếu trường 422",
+      "payload": {
+        "email": "missing@example.com"
+      },
+      "response": {
+        "statusCode": 422,
+        "message": "Lỗi dữ liệu đầu vào",
+        "data": null,
+        "error": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "password"
+            ],
+            "msg": "Field required",
+            "input": {
+              "email": "missing@example.com"
+            }
+          },
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "full_name"
+            ],
+            "msg": "Field required",
+            "input": {
+              "email": "missing@example.com"
+            }
+          }
+        ],
+        "path": "/auth/register",
+        "timestamp": "2026-08-26T15:25:19.785206"
+      },
+      "elapsed_ms": 2.94
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-006",
+      "name": "Đăng nhập thành công",
+      "method": "POST",
+      "endpoint": "/auth/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Nhận access token và refresh token",
+      "payload": {
+        "email": "qa_owner@example.com"
+      },
+      "response": {
+        "statusCode": 200,
+        "message": "Đăng nhập thành công",
+        "data": {
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3MzMzMjAuODY4MjgxfQ.pRx38GkjAM936q8VUejaZxtSktvgAX9Lkmg_QtmWjns",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTkxOTIwLjg2Njk2NX0.b7vZpy_gxYIJ2oNb51hmbGo_w4rOCFXT8hfzcQkdJWA",
+          "token_type": "bearer"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:20.869175",
+        "path": "/auth/login"
+      },
+      "elapsed_ms": 226.08
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-007",
+      "name": "Đăng nhập sai mật khẩu",
+      "method": "POST",
+      "endpoint": "/auth/login",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Từ chối xác thực 401 Unauthorized",
+      "payload": {
+        "email": "qa_owner@example.com"
+      },
+      "response": {
+        "statusCode": 401,
+        "message": "Thông tin đăng nhập không đúng",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/auth/login",
+        "timestamp": "2026-08-26T15:25:21.080704"
+      },
+      "elapsed_ms": 211.18
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-008",
+      "name": "Đăng nhập tài khoản không tồn tại",
+      "method": "POST",
+      "endpoint": "/auth/login",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Từ chối 401 Unauthorized",
+      "payload": {
+        "email": "nonexistent@example.com"
+      },
+      "response": {
+        "statusCode": 401,
+        "message": "Thông tin đăng nhập không đúng",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/auth/login",
+        "timestamp": "2026-08-26T15:25:21.085293"
+      },
+      "elapsed_ms": 4.27
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-009",
+      "name": "Đăng nhập tài khoản bị khóa",
+      "method": "POST",
+      "endpoint": "/auth/login",
+      "expected_status": 400,
+      "actual_status": 400,
+      "status": "PASS",
+      "details": "Báo lỗi tài khoản bị khóa 400 Bad Request",
+      "payload": {
+        "email": "qa_locked@example.com"
+      },
+      "response": {
+        "statusCode": 400,
+        "message": "Tài khoản của bạn đã bị khóa",
+        "data": null,
+        "error": "Bad Request",
+        "path": "/auth/login",
+        "timestamp": "2026-08-26T15:25:21.293416"
+      },
+      "elapsed_ms": 208.11
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-010",
+      "name": "Cấp mới Access Token bằng Refresh Token",
+      "method": "POST",
+      "endpoint": "/auth/refresh",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Cấp access token mới thành công",
+      "payload": {
+        "refresh_token": "..."
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Yêu cầu cấp access token thành công",
+        "data": {
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3MzMzMjEuMjk3NzM4fQ.6x3TRnxVQt6Zarj9QKJLmwhfnyv3YirXEmF34EjxXPg",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTkxOTIwLjg2Njk2NX0.b7vZpy_gxYIJ2oNb51hmbGo_w4rOCFXT8hfzcQkdJWA",
+          "token_type": "bearer"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.297985",
+        "path": "/auth/refresh"
+      },
+      "elapsed_ms": 4.64
+    },
+    {
+      "category": "Authentication",
+      "test_id": "TC-AUTH-011",
+      "name": "Refresh Token giả mạo/không hợp lệ",
+      "method": "POST",
+      "endpoint": "/auth/refresh",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Chặn refresh token giả mạo 401",
+      "payload": {
+        "refresh_token": "invalid.jwt.token"
+      },
+      "response": {
+        "statusCode": 401,
+        "message": "Không thể xác thực thông tin",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/auth/refresh",
+        "timestamp": "2026-08-26T15:25:21.301727"
+      },
+      "elapsed_ms": 3.08
+    },
+    {
+      "category": "Users",
+      "test_id": "TC-USR-001",
+      "name": "Lấy thông tin cá nhân (Get Me)",
+      "method": "GET",
+      "endpoint": "/users/me",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Trả về đúng profile của token",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy thông tin thành công",
+        "data": {
+          "id": 1,
+          "email": "qa_owner@example.com",
+          "full_name": "QA Project Owner",
+          "role": "user",
+          "is_active": true,
+          "created_at": "2026-08-26T08:25:19"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.307997",
+        "path": "/users/me"
+      },
+      "elapsed_ms": 5.44
+    },
+    {
+      "category": "Users",
+      "test_id": "TC-USR-002",
+      "name": "Lấy profile khi không gửi Token",
+      "method": "GET",
+      "endpoint": "/users/me",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Bắt lỗi thiếu token",
+      "payload": null,
+      "response": {
+        "statusCode": 401,
+        "message": "Not authenticated",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/users/me",
+        "timestamp": "2026-08-26T15:25:21.310583"
+      },
+      "elapsed_ms": 2.15
+    },
+    {
+      "category": "Users",
+      "test_id": "TC-USR-003",
+      "name": "Admin lấy danh sách người dùng",
+      "method": "GET",
+      "endpoint": "/users",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Trả về danh sách 5 users",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Danh sách user",
+        "data": [
+          {
+            "id": 1,
+            "email": "qa_owner@example.com",
+            "full_name": "QA Project Owner",
+            "role": "user",
+            "is_active": true,
+            "created_at": "2026-08-26T08:25:19"
+          },
+          {
+            "id": 2,
+            "email": "qa_member@example.com",
+            "full_name": "QA Member User",
+            "role": "user",
+            "is_active": true,
+            "created_at": "2026-08-26T08:25:20"
+          },
+          {
+            "id": 3,
+            "email": "qa_stranger@example.com",
+            "full_name": "QA Stranger User",
+            "role": "user",
+            "is_active": true,
+            "created_at": "2026-08-26T08:25:20"
+          },
+          {
+            "id": 4,
+            "email": "qa_admin@example.com",
+            "full_name": "QA System Administrator",
+            "role": "admin",
+            "is_active": true,
+            "created_at": "2026-08-26T08:25:20"
+          },
+          {
+            "id": 5,
+            "email": "qa_locked@example.com",
+            "full_name": "QA Locked User",
+            "role": "user",
+            "is_active": false,
+            "created_at": "2026-08-26T08:25:20"
+          }
+        ],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.315115",
+        "path": "/users"
+      },
+      "elapsed_ms": 4.8
+    },
+    {
+      "category": "Users",
+      "test_id": "TC-USR-004",
+      "name": "User thường truy cập API Admin (RBAC)",
+      "method": "GET",
+      "endpoint": "/users",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chặn User thường bằng 403 Forbidden chính xác",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Quyền truy cập bị từ chối.",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/users",
+        "timestamp": "2026-08-26T15:25:21.318070"
+      },
+      "elapsed_ms": 2.52
+    },
+    {
+      "category": "Users",
+      "test_id": "TC-USR-005",
+      "name": "Admin lọc user theo Email và Trạng thái",
+      "method": "GET",
+      "endpoint": "/users?email=...&status=...",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Lọc chính xác 1 kết quả",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Danh sách user",
+        "data": [
+          {
+            "id": 1,
+            "email": "qa_owner@example.com",
+            "full_name": "QA Project Owner",
+            "role": "user",
+            "is_active": true,
+            "created_at": "2026-08-26T08:25:19"
+          }
+        ],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.322423",
+        "path": "/users"
+      },
+      "elapsed_ms": 4.61
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-001",
+      "name": "Tạo dự án mới thành công",
+      "method": "POST",
+      "endpoint": "/project",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Tạo project id=1, gán OWNER",
+      "payload": {
+        "name": "Dự án Alpha Quản lý Kho",
+        "description": "Hệ thống quản lý kho thông minh"
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Khởi tạo dự án thành công",
+        "data": {
+          "id": 1,
+          "name": "Dự án Alpha Quản lý Kho",
+          "description": "Hệ thống quản lý kho thông minh",
+          "owner_id": 1,
+          "created_at": "2026-08-26T08:25:21",
+          "role_user": "owner"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.332233",
+        "path": "/project"
+      },
+      "elapsed_ms": 9.67
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-002",
+      "name": "Tạo dự án thiếu tên bắt buộc",
+      "method": "POST",
+      "endpoint": "/project",
+      "expected_status": 422,
+      "actual_status": 422,
+      "status": "PASS",
+      "details": "Bắt lỗi 422 Validation Error",
+      "payload": {
+        "description": "No Name"
+      },
+      "response": {
+        "statusCode": 422,
+        "message": "Lỗi dữ liệu đầu vào",
+        "data": null,
+        "error": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "name"
+            ],
+            "msg": "Field required",
+            "input": {
+              "description": "No Name"
+            }
+          }
+        ],
+        "path": "/project",
+        "timestamp": "2026-08-26T15:25:21.335733"
+      },
+      "elapsed_ms": 3.2
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-003",
+      "name": "Tìm kiếm dự án theo tên",
+      "method": "GET",
+      "endpoint": "/project?search=Alpha",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Tìm thấy dự án tương ứng",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy danh sách thành công",
+        "data": [
+          {
+            "id": 1,
+            "name": "Dự án Alpha Quản lý Kho",
+            "description": "Hệ thống quản lý kho thông minh",
+            "owner_id": 1,
+            "created_at": "2026-08-26T08:25:21",
+            "role_user": "owner"
+          }
+        ],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.341331",
+        "path": "/project"
+      },
+      "elapsed_ms": 5.99
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-004",
+      "name": "Owner xem chi tiết dự án",
+      "method": "GET",
+      "endpoint": "/project/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Trả về thông tin chi tiết và role_user=owner",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Chi tiết dự án",
+        "data": {
+          "id": 1,
+          "name": "Dự án Alpha Quản lý Kho",
+          "description": "Hệ thống quản lý kho thông minh",
+          "owner_id": 1,
+          "created_at": "2026-08-26T08:25:21",
+          "role_user": "owner"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.347620",
+        "path": "/project/1"
+      },
+      "elapsed_ms": 6.56
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-005",
+      "name": "Người ngoài xem chi tiết dự án (IDOR)",
+      "method": "GET",
+      "endpoint": "/project/1",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Bảo mật tốt: Chặn người ngoài bằng 403 Forbidden",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Bạn không có quyền truy cập dự án này",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/project/1",
+        "timestamp": "2026-08-26T15:25:21.352627"
+      },
+      "elapsed_ms": 4.04
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-006",
+      "name": "Owner thêm thành viên vào dự án",
+      "method": "POST",
+      "endpoint": "/project/1/member",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Thêm member thành công",
+      "payload": {
+        "user_id": 2,
+        "role": "member"
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Thêm thành viên thành công",
+        "data": {
+          "id": 2,
+          "user_id": 2,
+          "project_id": 1,
+          "role": "member",
+          "joined_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.361650",
+        "path": "/project/1/member"
+      },
+      "elapsed_ms": 9.4
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-007",
+      "name": "Thêm trùng lặp thành viên đã có",
+      "method": "POST",
+      "endpoint": "/project/1/member",
+      "expected_status": 409,
+      "actual_status": 409,
+      "status": "PASS",
+      "details": "Bắt lỗi 409 Conflict thành viên đã tồn tại",
+      "payload": {
+        "user_id": 2,
+        "role": "member"
+      },
+      "response": {
+        "statusCode": 409,
+        "message": "Người dùng đã là thành viên của dự án",
+        "data": null,
+        "error": "Conflict",
+        "path": "/project/1/member",
+        "timestamp": "2026-08-26T15:25:21.367617"
+      },
+      "elapsed_ms": 5.6
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-008",
+      "name": "Member thường cố tình thêm thành viên khác",
+      "method": "POST",
+      "endpoint": "/project/1/member",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chặn bằng 403 Forbidden chính xác",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Chỉ Owner mới có quyền thêm thành viên",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/project/1/member",
+        "timestamp": "2026-08-26T15:25:21.372415"
+      },
+      "elapsed_ms": 4.49
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-009",
+      "name": "Lấy danh sách thành viên dự án",
+      "method": "GET",
+      "endpoint": "/project/1/members",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Trả về 2 thành viên (Owner & Member)",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy danh sách thành viên thành công",
+        "data": [
+          {
+            "id": 1,
+            "user_id": 1,
+            "project_id": 1,
+            "role": "owner",
+            "joined_at": "2026-08-26T08:25:21"
+          },
+          {
+            "id": 2,
+            "user_id": 2,
+            "project_id": 1,
+            "role": "member",
+            "joined_at": "2026-08-26T08:25:21"
+          }
+        ],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.378284",
+        "path": "/project/1/members"
+      },
+      "elapsed_ms": 6.04
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-010",
+      "name": "Owner cập nhật thông tin dự án",
+      "method": "PATCH",
+      "endpoint": "/project/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Cập nhật tên & mô tả thành công",
+      "payload": {
+        "name": "Dự án Alpha (Updated)",
+        "description": "Mô tả mới cập nhật"
+      },
+      "response": {
+        "statusCode": 200,
+        "message": "Cập nhật project thành công",
+        "data": {
+          "id": 1,
+          "name": "Dự án Alpha (Updated)",
+          "description": "Mô tả mới cập nhật",
+          "owner_id": 1,
+          "created_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "path": "/project/1"
+      },
+      "elapsed_ms": 7.57
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-011",
+      "name": "Member thường sửa đổi thông tin dự án",
+      "method": "PATCH",
+      "endpoint": "/project/1",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chặn sửa đổi trái phép bằng 403",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Bạn không có quyền sửa đổi dự án",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/project/1",
+        "timestamp": "2026-08-26T15:25:21.390941"
+      },
+      "elapsed_ms": 4.7
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-012",
+      "name": "Lấy lịch sử thao tác dự án (Activity Logs)",
+      "method": "GET",
+      "endpoint": "/project/1/activities",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Ghi nhận đúng 3 logs hành động",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy lịch sử thao tác thành công",
+        "data": [
+          {
+            "id": 3,
+            "project_id": 1,
+            "user_id": 1,
+            "user_name": "QA Project Owner",
+            "action": "UPDATE_PROJECT",
+            "details": {
+              "name": "Dự án Alpha (Updated)",
+              "description": "Mô tả mới cập nhật"
+            },
+            "created_at": "2026-08-26T08:25:21"
+          },
+          {
+            "id": 2,
+            "project_id": 1,
+            "user_id": 1,
+            "user_name": "QA Project Owner",
+            "action": "ADD_MEMBER",
+            "details": {
+              "target_user_id": 2,
+              "role": "member"
+            },
+            "created_at": "2026-08-26T08:25:21"
+          },
+          {
+            "id": 1,
+            "project_id": 1,
+            "user_id": 1,
+            "user_name": "QA Project Owner",
+            "action": "CREATE_PROJECT",
+            "details": {
+              "name": "Dự án Alpha Quản lý Kho",
+              "description": "Hệ thống quản lý kho thông minh"
+            },
+            "created_at": "2026-08-26T08:25:21"
+          }
+        ],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.397353",
+        "path": "/project/1/activities"
+      },
+      "elapsed_ms": 6.57
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-001",
+      "name": "Member tạo task mới trong dự án",
+      "method": "POST",
+      "endpoint": "/project/1/tasks",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Tạo task id=1, gán assignee cho creator",
+      "payload": {
+        "title": "Thiết kế cơ sở dữ liệu v1",
+        "description": "Tạo ERD và quan hệ các bảng",
+        "priority": "high",
+        "due_date": "2026-12-31T23:59:59"
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Tạo task thành công",
+        "data": {
+          "id": 1,
+          "project_id": 1,
+          "title": "Thiết kế cơ sở dữ liệu v1",
+          "description": "Tạo ERD và quan hệ các bảng",
+          "assignee_id": 2,
+          "status": "todo",
+          "priority": "high",
+          "due_date": "2026-12-31T23:59:59",
+          "created_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.405185",
+        "path": "/project/1/tasks"
+      },
+      "elapsed_ms": 7.58
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-002",
+      "name": "Người ngoài tạo task trong dự án (IDOR)",
+      "method": "POST",
+      "endpoint": "/project/1/tasks",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chặn bằng 403 Forbidden chính xác",
+      "payload": {
+        "title": "Thiết kế cơ sở dữ liệu v1",
+        "description": "Tạo ERD và quan hệ các bảng",
+        "priority": "high",
+        "due_date": "2026-12-31T23:59:59"
+      },
+      "response": {
+        "statusCode": 403,
+        "message": "Bạn không có quyền truy cập dự án này",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/project/1/tasks",
+        "timestamp": "2026-08-26T15:25:21.409894"
+      },
+      "elapsed_ms": 4.53
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-003",
+      "name": "Tạo task sai enum Priority",
+      "method": "POST",
+      "endpoint": "/project/1/tasks",
+      "expected_status": 422,
+      "actual_status": 422,
+      "status": "PASS",
+      "details": "Bắt lỗi enum 422 chính xác",
+      "payload": {
+        "title": "Bad Priority",
+        "priority": "CRITICAL_URGENT"
+      },
+      "response": {
+        "statusCode": 422,
+        "message": "Lỗi dữ liệu đầu vào",
+        "data": null,
+        "error": [
+          {
+            "type": "enum",
+            "loc": [
+              "body",
+              "priority"
+            ],
+            "msg": "Input should be 'low', 'medium' or 'high'",
+            "input": "CRITICAL_URGENT",
+            "ctx": {
+              "expected": "'low', 'medium' or 'high'"
+            }
+          }
+        ],
+        "path": "/project/1/tasks",
+        "timestamp": "2026-08-26T15:25:21.414491"
+      },
+      "elapsed_ms": 4.23
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-004",
+      "name": "Lấy danh sách task + Lọc & Phân trang",
+      "method": "GET",
+      "endpoint": "/project/1/tasks",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Lọc theo priority=high & pagination meta hợp lệ",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy danh sách Task thành công",
+        "data": {
+          "data": [
+            {
+              "id": 1,
+              "project_id": 1,
+              "title": "Thiết kế cơ sở dữ liệu v1",
+              "description": "Tạo ERD và quan hệ các bảng",
+              "assignee_id": 2,
+              "status": "todo",
+              "priority": "high",
+              "due_date": "2026-12-31T23:59:59",
+              "created_at": "2026-08-26T08:25:21"
+            }
+          ],
+          "meta": {
+            "current_page": 1,
+            "page_size": 10,
+            "total_items": 1,
+            "total_pages": 1
+          }
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.422718",
+        "path": "/project/1/tasks"
+      },
+      "elapsed_ms": 8.54
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-005",
+      "name": "Xem chi tiết task",
+      "method": "GET",
+      "endpoint": "/tasks/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Trả về chi tiết task thành công",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Chi tiết task",
+        "data": {
+          "id": 1,
+          "project_id": 1,
+          "title": "Thiết kế cơ sở dữ liệu v1",
+          "description": "Tạo ERD và quan hệ các bảng",
+          "assignee_id": 2,
+          "status": "todo",
+          "priority": "high",
+          "due_date": "2026-12-31T23:59:59",
+          "created_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.428969",
+        "path": "/tasks/1"
+      },
+      "elapsed_ms": 5.7
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-006",
+      "name": "Người ngoài xem task chi tiết (IDOR)",
+      "method": "GET",
+      "endpoint": "/tasks/1",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chặn bằng 403 Forbidden chính xác",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Bạn không có quyền truy cập vào task này",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/tasks/1",
+        "timestamp": "2026-08-26T15:25:21.433441"
+      },
+      "elapsed_ms": 4.31
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-007",
+      "name": "Assignee cập nhật trạng thái task",
+      "method": "PATCH",
+      "endpoint": "/tasks/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Cập nhật status sang in_progress",
+      "payload": {
+        "status": "in_progress",
+        "title": "Thiết kế CSDL v2 (Đang làm)"
+      },
+      "response": {
+        "statusCode": 200,
+        "message": "Cập nhật thông tin task thành công",
+        "data": {
+          "id": 1,
+          "project_id": 1,
+          "title": "Thiết kế CSDL v2 (Đang làm)",
+          "description": "Tạo ERD và quan hệ các bảng",
+          "assignee_id": 2,
+          "status": "in_progress",
+          "priority": "high",
+          "due_date": "2026-12-31T23:59:59",
+          "created_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.439463",
+        "path": "/tasks/1"
+      },
+      "elapsed_ms": 6.13
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-008",
+      "name": "Gán task cho người không thuộc dự án",
+      "method": "PATCH",
+      "endpoint": "/tasks/1",
+      "expected_status": 400,
+      "actual_status": 400,
+      "status": "PASS",
+      "details": "Bắt lỗi 400 Bad Request người dùng không thuộc dự án",
+      "payload": {
+        "assignee_id": 9999
+      },
+      "response": {
+        "statusCode": 400,
+        "message": "Người dùng này không phải là thành viên của dự án",
+        "data": null,
+        "error": "Bad Request",
+        "path": "/tasks/1",
+        "timestamp": "2026-08-26T15:25:21.444666"
+      },
+      "elapsed_ms": 4.89
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-009",
+      "name": "Member thường cố tình xóa task",
+      "method": "DELETE",
+      "endpoint": "/tasks/1",
+      "expected_status": 403,
+      "actual_status": 403,
+      "status": "PASS",
+      "details": "Chỉ Owner mới có quyền xóa task (403)",
+      "payload": null,
+      "response": {
+        "statusCode": 403,
+        "message": "Bạn không có quyền xóa task này",
+        "data": null,
+        "error": "Forbidden",
+        "path": "/tasks/1",
+        "timestamp": "2026-08-26T15:25:21.449341"
+      },
+      "elapsed_ms": 4.42
+    },
+    {
+      "category": "Comments",
+      "test_id": "TC-CMT-001",
+      "name": "Tạo bình luận vào Task (Chuẩn RESTful Path)",
+      "method": "POST",
+      "endpoint": "/tasks/1/comments",
+      "expected_status": 201,
+      "actual_status": 404,
+      "status": "BUG (CRITICAL)",
+      "details": "Endpoint trả về HTTP 404 do Router thiếu dấu '/' (bị map thành /tasks1/comments thay vì /tasks/1/comments)",
+      "payload": {
+        "content": "..."
+      },
+      "response": "{\"statusCode\":404,\"message\":\"Not Found\",\"data\":null,\"error\":\"Not Found\",\"path\":\"/tasks/1/comments\",\"timestamp\":\"2026-08-26T15:25:21.451420\"}",
+      "elapsed_ms": 2.04
+    },
+    {
+      "category": "Comments",
+      "test_id": "TC-CMT-002",
+      "name": "Tạo bình luận vào Task (Đường dẫn Router thực tế)",
+      "method": "POST",
+      "endpoint": "/tasks1/comments",
+      "expected_status": 201,
+      "actual_status": 500,
+      "status": "BUG (HIGH)",
+      "details": "Lỗi thực thi 500: Truyền dict model_dump() vào cột String và gán nhầm user_id=member.id (project_members.id thay vì user_id)",
+      "payload": {
+        "content": "..."
+      },
+      "response": "Internal Server Error",
+      "elapsed_ms": 5.57
+    },
+    {
+      "category": "Comments",
+      "test_id": "TC-CMT-003",
+      "name": "Lấy danh sách bình luận Task (Chuẩn RESTful Path)",
+      "method": "GET",
+      "endpoint": "/tasks/1/comments",
+      "expected_status": 200,
+      "actual_status": 404,
+      "status": "BUG (CRITICAL)",
+      "details": "Endpoint 404 Not Found do Router thiếu '/'",
+      "payload": null,
+      "response": "{\"statusCode\":404,\"message\":\"Not Found\",\"data\":null,\"error\":\"Not Found\",\"path\":\"/tasks/1/comments\",\"timestamp\":\"2026-08-26T15:25:21.459546\"}",
+      "elapsed_ms": 2.42
+    },
+    {
+      "category": "Security",
+      "test_id": "TC-SEC-001",
+      "name": "SQL Injection trong tham số tìm kiếm",
+      "method": "GET",
+      "endpoint": "/project?search=' OR '1'='1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "SQLAlchemy Parameterized Query an toàn, chống SQLi thành công",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Lấy danh sách thành công",
+        "data": [],
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.462874",
+        "path": "/project"
+      },
+      "elapsed_ms": 3.31
+    },
+    {
+      "category": "Security",
+      "test_id": "TC-SEC-002",
+      "name": "XSS Payload trong tiêu đề Task",
+      "method": "POST",
+      "endpoint": "/project/1/tasks",
+      "expected_status": 201,
+      "actual_status": 201,
+      "status": "PASS",
+      "details": "Lưu trữ dữ liệu thô an toàn, không thực thi script phía server",
+      "payload": {
+        "title": "<script>alert('XSS')</script>",
+        "priority": "low"
+      },
+      "response": {
+        "statusCode": 201,
+        "message": "Tạo task thành công",
+        "data": {
+          "id": 2,
+          "project_id": 1,
+          "title": "<script>alert('XSS')</script>",
+          "description": null,
+          "assignee_id": 2,
+          "status": "todo",
+          "priority": "low",
+          "due_date": null,
+          "created_at": "2026-08-26T08:25:21"
+        },
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.468185",
+        "path": "/project/1/tasks"
+      },
+      "elapsed_ms": 5.31
+    },
+    {
+      "category": "Security",
+      "test_id": "TC-SEC-003",
+      "name": "Tấn công JWT Algorithm 'none'",
+      "method": "GET",
+      "endpoint": "/users",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "PyJWT chặt chẽ từ chối algorithm none bằng 401",
+      "payload": null,
+      "response": {
+        "statusCode": 401,
+        "message": "Không thể xác thực thông tin",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/users",
+        "timestamp": "2026-08-26T15:25:21.471181"
+      },
+      "elapsed_ms": 2.73
+    },
+    {
+      "category": "Security",
+      "test_id": "TC-SEC-004",
+      "name": "JWT giả mạo chữ ký (Forged Secret)",
+      "method": "GET",
+      "endpoint": "/users",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Từ chối xác thực 401 Unauthorized",
+      "payload": null,
+      "response": {
+        "statusCode": 401,
+        "message": "Không thể xác thực thông tin",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/users",
+        "timestamp": "2026-08-26T15:25:21.474095"
+      },
+      "elapsed_ms": 2.89
+    },
+    {
+      "category": "Security",
+      "test_id": "TC-SEC-005",
+      "name": "JWT thiếu trường định danh 'sub'",
+      "method": "GET",
+      "endpoint": "/users/me",
+      "expected_status": 401,
+      "actual_status": 401,
+      "status": "PASS",
+      "details": "Bắt lỗi thiếu claim 'sub' bằng 401",
+      "payload": null,
+      "response": {
+        "statusCode": 401,
+        "message": "Token không hợp lệ (thiếu định danh người dùng)",
+        "data": null,
+        "error": "Unauthorized",
+        "path": "/users/me",
+        "timestamp": "2026-08-26T15:25:21.476724"
+      },
+      "elapsed_ms": 2.44
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-013",
+      "name": "Owner xóa thành viên khỏi dự án",
+      "method": "DELETE",
+      "endpoint": "/project/1/members/2",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Xóa thành viên thành công",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Xóa thành viên thành công",
+        "data": null,
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.484344",
+        "path": "/project/1/members/2"
+      },
+      "elapsed_ms": 7.83
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-014",
+      "name": "Chặn xóa Creator/Owner chính của dự án",
+      "method": "DELETE",
+      "endpoint": "/project/1/members/1",
+      "expected_status": 400,
+      "actual_status": 400,
+      "status": "PASS",
+      "details": "Bảo vệ hệ thống: Không cho phép xóa creator (400)",
+      "payload": null,
+      "response": {
+        "statusCode": 400,
+        "message": "Không thể xóa người khởi tạo dự án",
+        "data": null,
+        "error": "Bad Request",
+        "path": "/project/1/members/1",
+        "timestamp": "2026-08-26T15:25:21.489545"
+      },
+      "elapsed_ms": 4.68
+    },
+    {
+      "category": "Tasks",
+      "test_id": "TC-TSK-010",
+      "name": "Owner xóa task",
+      "method": "DELETE",
+      "endpoint": "/tasks/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Xóa task thành công",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Xóa task thành công",
+        "data": null,
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.496012",
+        "path": "/tasks/1"
+      },
+      "elapsed_ms": 6.42
+    },
+    {
+      "category": "Projects",
+      "test_id": "TC-PRJ-015",
+      "name": "Owner xóa toàn bộ dự án",
+      "method": "DELETE",
+      "endpoint": "/project/1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "status": "PASS",
+      "details": "Xóa dự án và liên hoàn thành công",
+      "payload": null,
+      "response": {
+        "statusCode": 200,
+        "message": "Xóa dự án thành công",
+        "data": null,
+        "error": null,
+        "timestamp": "2026-08-26T15:25:21.501508",
+        "path": "/project/1"
+      },
+      "elapsed_ms": 5.58
+    }
+  ]
+}

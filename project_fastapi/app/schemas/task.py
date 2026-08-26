@@ -12,6 +12,17 @@ class TaskCreate(BaseModel):
     priority: TaskPriority = Field(default=TaskPriority.MEDIUM)
     
     
+class CreateComment(BaseModel):
+    content: str
+    
+    
+class CommentData(BaseModel):
+    id: int
+    task_id: int
+    user_id: int
+    content: str
+    created_at: datetime
+    
 class TaskUpdate(BaseModel):
     title: str | None = Field(None, min_length=1, max_length=255)
     description: str | None = Field(None, max_length=2000)
@@ -35,4 +46,4 @@ class TaskData(BaseModel):
         
 class ListTaskData(BaseModel):
     data: List[TaskData]
-    meta: dict
+    meta: dict

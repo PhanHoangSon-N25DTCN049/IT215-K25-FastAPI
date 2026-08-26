@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, asc
-from app.models import ProjectModel, ProjectMembersModel, RoleProject, TaskModel, TaskStatus, TaskPriority
+from app.models import ProjectModel, ProjectMembersModel, RoleProject, TaskModel, TaskStatus, TaskPriority, CommentTaskModel
 from app.schemas import ProjectData
 from app.core import NotFoundException
 
@@ -85,3 +85,13 @@ def update_task(task: TaskModel, task_data: dict, db: Session):
 def del_task(task: TaskModel, db: Session):
     db.delete(task)
     db.commit()
+    
+def add_comment(comment_data: dict, db: Session):
+    new_comment = CommentTaskModel(**comment_data)
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment)
+    return new_comment
+
+def get_all_comment_task(task_id: int, db: Session):
+    return db.query(CommentTaskModel).filter(CommentTaskModel.task_id == task_id).all()

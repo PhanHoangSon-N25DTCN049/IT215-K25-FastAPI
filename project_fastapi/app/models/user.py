@@ -6,7 +6,7 @@ from typing import List, TYPE_CHECKING
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from app.models import ProjectModel, ProjectMembersModel, TaskModel, ActivityLogModel
+    from app.models import ProjectModel, ProjectMembersModel, TaskModel, ActivityLogModel, CommentTaskModel
 
 class RoleUser(str, enum.Enum):
     USER = "user"
@@ -30,3 +30,4 @@ class UserModel(Base):
     project_member: Mapped[List["ProjectMembersModel"]] = relationship(back_populates="user")
     task: Mapped[List["TaskModel"]] = relationship(back_populates="assignee")
     activity_logs: Mapped[List["ActivityLogModel"]] = relationship(back_populates="user")
+    comment: Mapped[List["CommentTaskModel"]] = relationship(back_populates="user")

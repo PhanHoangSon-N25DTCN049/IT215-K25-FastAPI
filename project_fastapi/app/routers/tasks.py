@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.db import get_db
-from app.schemas import ApiResponse, TaskCreate, api_response, TaskData, ListTaskData, TaskUpdate
+from app.schemas import ApiResponse, TaskCreate, api_response, TaskData, ListTaskData, TaskUpdate, CreateComment, CommentData
 from .projects import project_router
 from app.dependencies import verify_project_member, verify_task_member
 from app.models import ProjectModel, ProjectMembersModel, TaskPriority, TaskStatus, TaskModel, RoleProject
-from app.services import create_task, get_all_task, get_task_by_id, update_task, del_task
+from app.services import create_task, get_all_task, get_task_by_id, update_task, del_task, add_comment, get_all_comment_task
 from app.core import ForbiddenException, BadRequestException
 
 task_router = APIRouter(prefix="/tasks", tags=["Task"])
@@ -51,7 +51,7 @@ def create_task_api(
     "/{project_id}/tasks",
     status_code=status.HTTP_200_OK,
     response_model=ApiResponse[ListTaskData],
-    summary="Lấy danh sách task trong dự án (Filter, Search, Sort & Phân trang)",
+    summary="Lấy danh sách task trong dự án",
     description="Chỉ thành viên dự án mới được lấy danh sách task. Hỗ trợ lọc theo user_id, status (TODO, IN_PROGRESS, DONE), priority (LOW, MEDIUM, HIGH), tìm kiếm theo title, phân trang (page, size) và sắp xếp (sort_by, sort_order)."
 )
 def get_all_task_api(
@@ -172,3 +172,56 @@ def del_task_api(
         200,
         "Xóa task thành công"
     )
+
+
+@task_router.post(
+    "/{task_id}/comments",
+    response_model=ApiResponse[CommentData],
+    status_code=201,
+    summary="Comment task",
+    description="Chỉ thành viên dự án mới có thể bình luận"
+)
+def create_comment_api(
+    request: Request,
+    comment_data: CreateComment,
+    task_data: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
+    db: Session = Depends(get_db)
+):
+    task, member = task_data
+    
+    comment = {
+        "task_id": task.id,
+        "user_id": member.user_id,
+        "content": comment_data.content 
+    }
+    
+    new_comment = add_comment(comment, db)
+    
+    return api_response(
+        request,
+        201,
+        "Thêm bình luận thành công",
+        new_comment
+    )
+@task_router.get(
+    "/{task_id}/comments",
+    response_model=ApiResponse[List[CommentData]],
+    status_code=200,
+    summary="Lấy Comment task",
+    description="Chỉ thành viên dự án mới có thể lấy comment"
+)
+def get_all_comment_api(
+    request: Request,
+    task_data: tuple[TaskModel, ProjectMembersModel] = Depends(verify_task_member),
+    db: Session = Depends(get_db)
+):
+    task, _ =  task_data
+    list_comment = get_all_comment_task(task_id=task.id, db=db)
+    
+    return api_response(
+        request,
+        200,
+        "danh sách comment thành công",
+        list_comment
+    )
+    

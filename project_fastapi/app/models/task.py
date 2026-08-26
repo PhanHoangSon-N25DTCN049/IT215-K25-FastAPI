@@ -33,5 +33,20 @@ class TaskModel(Base):
     
     
     project: Mapped["ProjectModel"] = relationship(back_populates="task")
-    assignee: Mapped["UserModel"] = relationship(back_populates="task") 
+    assignee: Mapped["UserModel"] = relationship(back_populates="task")
+    comment: Mapped["CommentTaskModel"] = relationship(back_populates="task")
+    
+    
+class CommentTaskModel(Base):
+    __tablename__ = "task_comment"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    task_id: Mapped[int] = mapped_column(Integer, ForeignKey("tasks.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    content: Mapped[str] = mapped_column(String(1000), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    
+    user: Mapped["UserModel"] = relationship(back_populates="comment")
+    task: Mapped["TaskModel"] = relationship(back_populates="comment")
     

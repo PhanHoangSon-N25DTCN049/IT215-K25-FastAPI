@@ -249,7 +249,7 @@ def del_project_member_api(
     status_code=status.HTTP_200_OK,
     response_model=ApiResponse[List[ProjectMemberData]],
     summary="Lấy danh sách thành viên trong dự án",
-    description="Trả về toàn bộ danh sách thành viên kèm role tương ứng trong dự án."
+    description="Trả về toàn bộ danh sách thành viên kèm role tương ứng trong dự án"
 )
 def get_all_member_api(
     request: Request,
@@ -266,14 +266,14 @@ def get_all_member_api(
         "Lấy danh sách thành viên thành công",
         list_member
     )
-
+ 
 
 @project_router.get(
     "/{project_id}/activities",
     status_code=status.HTTP_200_OK,
     response_model=ApiResponse[List[ActivityLogData]],
     summary="Lấy lịch sử thao tác của dự án",
-    description="Chỉ thành viên thuộc dự án mới có quyền xem lịch sử thao tác. Hỗ trợ phân trang."
+    description="Chỉ thành viên thuộc dự án mới có quyền xem lịch sử thao tác"
 )
 def get_project_activities_api(
     request: Request,
