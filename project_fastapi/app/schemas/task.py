@@ -13,7 +13,7 @@ class TaskCreate(BaseModel):
     
     
 class CreateComment(BaseModel):
-    content: str
+    content: str = Field(..., min_length=1, max_length=1000)
     
     
 class CommentData(BaseModel):

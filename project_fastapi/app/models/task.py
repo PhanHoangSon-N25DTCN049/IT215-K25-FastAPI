@@ -24,7 +24,7 @@ class TaskModel(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     project_id: Mapped[int] = mapped_column(Integer, ForeignKey("projects.id"), nullable=False)
     title: Mapped[str] = mapped_column(String(1000), nullable=False)
-    description: Mapped[str] = mapped_column(String(1000), nullable=True)
+    description: Mapped[str] = mapped_column(String(2000), nullable=True)
     assignee_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     status: Mapped["TaskStatus"] = mapped_column(Enum(TaskStatus), nullable=False, default=TaskStatus.TODO)
     priority: Mapped["TaskPriority"] = mapped_column(Enum(TaskPriority), nullable=False)

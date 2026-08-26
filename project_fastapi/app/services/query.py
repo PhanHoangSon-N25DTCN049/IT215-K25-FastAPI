@@ -71,5 +71,5 @@ def query_project_by_id(db: Session, id: int, id_user_query: int):
 def query_project_member_by_id(id: int, db:Session):
     return db.query(ProjectMembersModel).filter(ProjectMembersModel.id == id).first()
 
-def query_all_project_member(project_id: Session, db: Session):
+def query_all_project_member(project_id: int, db: Session):
     return db.query(ProjectMembersModel).filter(ProjectMembersModel.project_id == project_id).all()

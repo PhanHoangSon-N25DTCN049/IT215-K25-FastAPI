@@ -41,7 +41,7 @@ def join_project(user_id: int, project_id: int, db:Session, role: RoleProject = 
     
     return new_member
 
-def update_project(data_update: dict, project: ProjectData, db: Session):
+def update_project(data_update: dict, project: ProjectModel, db: Session):
     
     for key, value in data_update.items():
         setattr(project, key, value)

@@ -92,7 +92,13 @@ def login_auth(request: Request, email: EmailStr = Form(...), password: str = Fo
 def refresh_access_token(request: Request, data: RefreshRequest, db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(data.refresh_token, settings.REFRESH_SECRET_KEY, [settings.ALGORITHM])
-        user = query_user_by_id(payload.get("sub"), db)
+        sub = payload.get("sub")
+        if not sub:
+            raise UnauthorizedException(
+                message="Token không hợp lệ (thiếu định danh người dùng)",
+                headers={"WWW-Authenticate": "Bearer"}
+            )
+        user = query_user_by_id(int(sub), db)
         if not user or user.refresh_token != data.refresh_token or user.is_revoked == True:
             raise UnauthorizedException(
                 message="Token không còn hợp lệ",
