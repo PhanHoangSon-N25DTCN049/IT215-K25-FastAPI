@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26T15:55:32.185864",
+  "timestamp": "2026-08-26T17:28:07.841736",
   "total_tests": 50,
   "passed": 50,
   "failed": 0,
@@ -20,7 +20,7 @@
       "response": {
         "message": "Kết nối database Thành công"
       },
-      "elapsed_ms": 31.01
+      "elapsed_ms": 27.33
     },
     {
       "category": "Authentication",
@@ -46,13 +46,13 @@
           "full_name": "QA Project Owner",
           "role": "user",
           "is_active": true,
-          "created_at": "2026-08-26T08:55:30"
+          "created_at": "2026-08-26T10:28:06"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:30.467368",
+        "timestamp": "2026-08-26T17:28:06.122235",
         "path": "/auth/register"
       },
-      "elapsed_ms": 227.82
+      "elapsed_ms": 225.43
     },
     {
       "category": "Authentication",
@@ -75,9 +75,9 @@
         "data": null,
         "error": "Conflict",
         "path": "/auth/register",
-        "timestamp": "2026-08-26T15:55:30.472161"
+        "timestamp": "2026-08-26T17:28:06.127704"
       },
-      "elapsed_ms": 3.93
+      "elapsed_ms": 4.75
     },
     {
       "category": "Authentication",
@@ -113,9 +113,9 @@
           }
         ],
         "path": "/auth/register",
-        "timestamp": "2026-08-26T15:55:30.474987"
+        "timestamp": "2026-08-26T17:28:06.130764"
       },
-      "elapsed_ms": 2.62
+      "elapsed_ms": 2.73
     },
     {
       "category": "Authentication",
@@ -151,9 +151,9 @@
           }
         ],
         "path": "/auth/register",
-        "timestamp": "2026-08-26T15:55:30.477583"
+        "timestamp": "2026-08-26T17:28:06.133975"
       },
-      "elapsed_ms": 2.76
+      "elapsed_ms": 3.29
     },
     {
       "category": "Authentication",
@@ -197,9 +197,9 @@
           }
         ],
         "path": "/auth/register",
-        "timestamp": "2026-08-26T15:55:30.480165"
+        "timestamp": "2026-08-26T17:28:06.136821"
       },
-      "elapsed_ms": 2.33
+      "elapsed_ms": 2.72
     },
     {
       "category": "Authentication",
@@ -218,15 +218,15 @@
         "statusCode": 200,
         "message": "Đăng nhập thành công",
         "data": {
-          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3MzUxMzEuNTIzODN9.NjPlhjgfB9XvfX70vcgwndi5KlO51OJ4wGxp5NepMXA",
-          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTkzNzMxLjUyMjU1OH0.hSK4ZCd4oZgQTcDk-Avay28caybiw3caBxkQJIgD3XM",
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3NDA2ODcuMTgxMzY3fQ.L3VVUDWo2sa-dPrUM4PSiJfvXTGbi3cKOgNWPoc5yjQ",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTk5Mjg3LjE3OTkwN30.sVw_jbRL75ntoHBNTY691SwWN14lWQ98sTEr44dFHQ8",
           "token_type": "bearer"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:31.524638",
+        "timestamp": "2026-08-26T17:28:07.182256",
         "path": "/auth/login"
       },
-      "elapsed_ms": 211.73
+      "elapsed_ms": 216.79
     },
     {
       "category": "Authentication",
@@ -247,9 +247,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/login",
-        "timestamp": "2026-08-26T15:55:31.736381"
+        "timestamp": "2026-08-26T17:28:07.400465"
       },
-      "elapsed_ms": 210.83
+      "elapsed_ms": 217.73
     },
     {
       "category": "Authentication",
@@ -270,9 +270,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/login",
-        "timestamp": "2026-08-26T15:55:31.758606"
+        "timestamp": "2026-08-26T17:28:07.405376"
       },
-      "elapsed_ms": 21.86
+      "elapsed_ms": 4.71
     },
     {
       "category": "Authentication",
@@ -293,9 +293,9 @@
         "data": null,
         "error": "Bad Request",
         "path": "/auth/login",
-        "timestamp": "2026-08-26T15:55:31.968309"
+        "timestamp": "2026-08-26T17:28:07.620349"
       },
-      "elapsed_ms": 209.89
+      "elapsed_ms": 215.04
     },
     {
       "category": "Authentication",
@@ -314,15 +314,15 @@
         "statusCode": 201,
         "message": "Yêu cầu cấp access token thành công",
         "data": {
-          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3MzUxMzEuOTczMTA4fQ.PoWRwfFEf2d1vSMdw2YOKF1iiNfjoN964iBZl6hLtyU",
-          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTkzNzMxLjUyMjU1OH0.hSK4ZCd4oZgQTcDk-Avay28caybiw3caBxkQJIgD3XM",
+          "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJleHAiOjE3ODc3NDA2ODcuNjI0Njk2fQ.cXSQ5f3DNT-gdJzcoIKRCL7ymQebU8Kjnji99bQOmP8",
+          "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzg3OTk5Mjg3LjE3OTkwN30.sVw_jbRL75ntoHBNTY691SwWN14lWQ98sTEr44dFHQ8",
           "token_type": "bearer"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:31.973345",
+        "timestamp": "2026-08-26T17:28:07.624944",
         "path": "/auth/refresh"
       },
-      "elapsed_ms": 4.87
+      "elapsed_ms": 4.7
     },
     {
       "category": "Authentication",
@@ -343,9 +343,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/auth/refresh",
-        "timestamp": "2026-08-26T15:55:31.976551"
+        "timestamp": "2026-08-26T17:28:07.628321"
       },
-      "elapsed_ms": 3.05
+      "elapsed_ms": 2.74
     },
     {
       "category": "Users",
@@ -367,13 +367,13 @@
           "full_name": "QA Project Owner",
           "role": "user",
           "is_active": true,
-          "created_at": "2026-08-26T08:55:30"
+          "created_at": "2026-08-26T10:28:06"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:31.982491",
+        "timestamp": "2026-08-26T17:28:07.634515",
         "path": "/users/me"
       },
-      "elapsed_ms": 4.82
+      "elapsed_ms": 5.19
     },
     {
       "category": "Users",
@@ -392,9 +392,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/users/me",
-        "timestamp": "2026-08-26T15:55:31.986253"
+        "timestamp": "2026-08-26T17:28:07.637316"
       },
-      "elapsed_ms": 3.39
+      "elapsed_ms": 2.58
     },
     {
       "category": "Users",
@@ -417,7 +417,7 @@
             "full_name": "QA Project Owner",
             "role": "user",
             "is_active": true,
-            "created_at": "2026-08-26T08:55:30"
+            "created_at": "2026-08-26T10:28:06"
           },
           {
             "id": 2,
@@ -425,7 +425,7 @@
             "full_name": "QA Member User",
             "role": "user",
             "is_active": true,
-            "created_at": "2026-08-26T08:55:31"
+            "created_at": "2026-08-26T10:28:06"
           },
           {
             "id": 3,
@@ -433,7 +433,7 @@
             "full_name": "QA Stranger User",
             "role": "user",
             "is_active": true,
-            "created_at": "2026-08-26T08:55:31"
+            "created_at": "2026-08-26T10:28:06"
           },
           {
             "id": 4,
@@ -441,7 +441,7 @@
             "full_name": "QA System Administrator",
             "role": "admin",
             "is_active": true,
-            "created_at": "2026-08-26T08:55:31"
+            "created_at": "2026-08-26T10:28:06"
           },
           {
             "id": 5,
@@ -449,14 +449,14 @@
             "full_name": "QA Locked User",
             "role": "user",
             "is_active": false,
-            "created_at": "2026-08-26T08:55:31"
+            "created_at": "2026-08-26T10:28:06"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:31.990629",
+        "timestamp": "2026-08-26T17:28:07.642220",
         "path": "/users"
       },
-      "elapsed_ms": 4.81
+      "elapsed_ms": 5.05
     },
     {
       "category": "Users",
@@ -475,9 +475,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/users",
-        "timestamp": "2026-08-26T15:55:31.993995"
+        "timestamp": "2026-08-26T17:28:07.645526"
       },
-      "elapsed_ms": 2.63
+      "elapsed_ms": 2.98
     },
     {
       "category": "Users",
@@ -500,14 +500,14 @@
             "full_name": "QA Project Owner",
             "role": "user",
             "is_active": true,
-            "created_at": "2026-08-26T08:55:30"
+            "created_at": "2026-08-26T10:28:06"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:31.998032",
+        "timestamp": "2026-08-26T17:28:07.650186",
         "path": "/users"
       },
-      "elapsed_ms": 4.42
+      "elapsed_ms": 4.9
     },
     {
       "category": "Projects",
@@ -531,14 +531,14 @@
           "name": "Dự án Alpha Quản lý Kho",
           "description": "Hệ thống quản lý kho thông minh",
           "owner_id": 1,
-          "created_at": "2026-08-26T08:55:32",
+          "created_at": "2026-08-26T10:28:07",
           "role_user": "owner"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.008183",
+        "timestamp": "2026-08-26T17:28:07.660215",
         "path": "/project"
       },
-      "elapsed_ms": 10.17
+      "elapsed_ms": 10.18
     },
     {
       "category": "Projects",
@@ -571,9 +571,9 @@
           }
         ],
         "path": "/project",
-        "timestamp": "2026-08-26T15:55:32.012447"
+        "timestamp": "2026-08-26T17:28:07.663849"
       },
-      "elapsed_ms": 4.14
+      "elapsed_ms": 2.96
     },
     {
       "category": "Projects",
@@ -595,15 +595,15 @@
             "name": "Dự án Alpha Quản lý Kho",
             "description": "Hệ thống quản lý kho thông minh",
             "owner_id": 1,
-            "created_at": "2026-08-26T08:55:32",
+            "created_at": "2026-08-26T10:28:07",
             "role_user": "owner"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.018489",
+        "timestamp": "2026-08-26T17:28:07.669815",
         "path": "/project"
       },
-      "elapsed_ms": 6.14
+      "elapsed_ms": 6.18
     },
     {
       "category": "Projects",
@@ -624,14 +624,14 @@
           "name": "Dự án Alpha Quản lý Kho",
           "description": "Hệ thống quản lý kho thông minh",
           "owner_id": 1,
-          "created_at": "2026-08-26T08:55:32",
+          "created_at": "2026-08-26T10:28:07",
           "role_user": "owner"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.024510",
+        "timestamp": "2026-08-26T17:28:07.676595",
         "path": "/project/1"
       },
-      "elapsed_ms": 5.48
+      "elapsed_ms": 6.65
     },
     {
       "category": "Projects",
@@ -650,9 +650,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1",
-        "timestamp": "2026-08-26T15:55:32.029225"
+        "timestamp": "2026-08-26T17:28:07.681815"
       },
-      "elapsed_ms": 4.47
+      "elapsed_ms": 5.02
     },
     {
       "category": "Projects",
@@ -676,13 +676,13 @@
           "user_id": 2,
           "project_id": 1,
           "role": "member",
-          "joined_at": "2026-08-26T08:55:32"
+          "joined_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.038329",
+        "timestamp": "2026-08-26T17:28:07.691446",
         "path": "/project/1/member"
       },
-      "elapsed_ms": 9.42
+      "elapsed_ms": 9.68
     },
     {
       "category": "Projects",
@@ -704,9 +704,9 @@
         "data": null,
         "error": "Conflict",
         "path": "/project/1/member",
-        "timestamp": "2026-08-26T15:55:32.044530"
+        "timestamp": "2026-08-26T17:28:07.697678"
       },
-      "elapsed_ms": 5.62
+      "elapsed_ms": 5.83
     },
     {
       "category": "Projects",
@@ -725,9 +725,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1/member",
-        "timestamp": "2026-08-26T15:55:32.049118"
+        "timestamp": "2026-08-26T17:28:07.702621"
       },
-      "elapsed_ms": 4.5
+      "elapsed_ms": 5.04
     },
     {
       "category": "Projects",
@@ -749,21 +749,21 @@
             "user_id": 1,
             "project_id": 1,
             "role": "owner",
-            "joined_at": "2026-08-26T08:55:32"
+            "joined_at": "2026-08-26T10:28:07"
           },
           {
             "id": 2,
             "user_id": 2,
             "project_id": 1,
             "role": "member",
-            "joined_at": "2026-08-26T08:55:32"
+            "joined_at": "2026-08-26T10:28:07"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.054317",
+        "timestamp": "2026-08-26T17:28:07.708180",
         "path": "/project/1/members"
       },
-      "elapsed_ms": 5.33
+      "elapsed_ms": 5.82
     },
     {
       "category": "Projects",
@@ -787,12 +787,12 @@
           "name": "Dự án Alpha (Updated)",
           "description": "Mô tả mới cập nhật",
           "owner_id": 1,
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
         "path": "/project/1"
       },
-      "elapsed_ms": 7.47
+      "elapsed_ms": 7.92
     },
     {
       "category": "Projects",
@@ -811,9 +811,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1",
-        "timestamp": "2026-08-26T15:55:32.066327"
+        "timestamp": "2026-08-26T17:28:07.721332"
       },
-      "elapsed_ms": 4.14
+      "elapsed_ms": 4.21
     },
     {
       "category": "Projects",
@@ -840,7 +840,7 @@
               "name": "Dự án Alpha (Updated)",
               "description": "Mô tả mới cập nhật"
             },
-            "created_at": "2026-08-26T08:55:32"
+            "created_at": "2026-08-26T10:28:07"
           },
           {
             "id": 2,
@@ -852,7 +852,7 @@
               "target_user_id": 2,
               "role": "member"
             },
-            "created_at": "2026-08-26T08:55:32"
+            "created_at": "2026-08-26T10:28:07"
           },
           {
             "id": 1,
@@ -864,14 +864,14 @@
               "name": "Dự án Alpha Quản lý Kho",
               "description": "Hệ thống quản lý kho thông minh"
             },
-            "created_at": "2026-08-26T08:55:32"
+            "created_at": "2026-08-26T10:28:07"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.072732",
+        "timestamp": "2026-08-26T17:28:07.727816",
         "path": "/project/1/activities"
       },
-      "elapsed_ms": 6.4
+      "elapsed_ms": 6.6
     },
     {
       "category": "Tasks",
@@ -901,13 +901,13 @@
           "status": "todo",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.080146",
+        "timestamp": "2026-08-26T17:28:07.735655",
         "path": "/project/1/tasks"
       },
-      "elapsed_ms": 7.42
+      "elapsed_ms": 7.95
     },
     {
       "category": "Tasks",
@@ -931,9 +931,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/project/1/tasks",
-        "timestamp": "2026-08-26T15:55:32.084920"
+        "timestamp": "2026-08-26T17:28:07.741145"
       },
-      "elapsed_ms": 4.3
+      "elapsed_ms": 4.84
     },
     {
       "category": "Tasks",
@@ -968,7 +968,7 @@
           }
         ],
         "path": "/project/1/tasks",
-        "timestamp": "2026-08-26T15:55:32.089387"
+        "timestamp": "2026-08-26T17:28:07.745613"
       },
       "elapsed_ms": 4.4
     },
@@ -997,7 +997,7 @@
               "status": "todo",
               "priority": "high",
               "due_date": "2026-12-31T23:59:59",
-              "created_at": "2026-08-26T08:55:32"
+              "created_at": "2026-08-26T10:28:07"
             }
           ],
           "meta": {
@@ -1008,10 +1008,10 @@
           }
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.097798",
+        "timestamp": "2026-08-26T17:28:07.754726",
         "path": "/project/1/tasks"
       },
-      "elapsed_ms": 8.62
+      "elapsed_ms": 9.25
     },
     {
       "category": "Tasks",
@@ -1036,13 +1036,13 @@
           "status": "todo",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.103852",
+        "timestamp": "2026-08-26T17:28:07.760805",
         "path": "/tasks/1"
       },
-      "elapsed_ms": 5.76
+      "elapsed_ms": 5.86
     },
     {
       "category": "Tasks",
@@ -1061,9 +1061,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/tasks/1",
-        "timestamp": "2026-08-26T15:55:32.108169"
+        "timestamp": "2026-08-26T17:28:07.765754"
       },
-      "elapsed_ms": 4.02
+      "elapsed_ms": 4.59
     },
     {
       "category": "Tasks",
@@ -1091,13 +1091,13 @@
           "status": "in_progress",
           "priority": "high",
           "due_date": "2026-12-31T23:59:59",
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.114014",
+        "timestamp": "2026-08-26T17:28:07.771857",
         "path": "/tasks/1"
       },
-      "elapsed_ms": 5.77
+      "elapsed_ms": 6.14
     },
     {
       "category": "Tasks",
@@ -1118,9 +1118,9 @@
         "data": null,
         "error": "Bad Request",
         "path": "/tasks/1",
-        "timestamp": "2026-08-26T15:55:32.119182"
+        "timestamp": "2026-08-26T17:28:07.776945"
       },
-      "elapsed_ms": 5.03
+      "elapsed_ms": 4.78
     },
     {
       "category": "Tasks",
@@ -1139,9 +1139,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/tasks/1",
-        "timestamp": "2026-08-26T15:55:32.124049"
+        "timestamp": "2026-08-26T17:28:07.782187"
       },
-      "elapsed_ms": 4.77
+      "elapsed_ms": 5.16
     },
     {
       "category": "Comments",
@@ -1164,13 +1164,13 @@
           "task_id": 1,
           "user_id": 2,
           "content": "Tài liệu ERD đã upload lên wiki nội bộ.",
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.130630",
+        "timestamp": "2026-08-26T17:28:07.789078",
         "path": "/tasks/1/comments"
       },
-      "elapsed_ms": 6.76
+      "elapsed_ms": 6.97
     },
     {
       "category": "Comments",
@@ -1192,14 +1192,14 @@
             "task_id": 1,
             "user_id": 2,
             "content": "Tài liệu ERD đã upload lên wiki nội bộ.",
-            "created_at": "2026-08-26T08:55:32"
+            "created_at": "2026-08-26T10:28:07"
           }
         ],
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.136410",
+        "timestamp": "2026-08-26T17:28:07.795094",
         "path": "/tasks/1/comments"
       },
-      "elapsed_ms": 5.64
+      "elapsed_ms": 5.9
     },
     {
       "category": "Comments",
@@ -1218,9 +1218,9 @@
         "data": null,
         "error": "Forbidden",
         "path": "/tasks/1/comments",
-        "timestamp": "2026-08-26T15:55:32.141026"
+        "timestamp": "2026-08-26T17:28:07.799952"
       },
-      "elapsed_ms": 4.05
+      "elapsed_ms": 4.55
     },
     {
       "category": "Security",
@@ -1238,10 +1238,10 @@
         "message": "Lấy danh sách thành công",
         "data": [],
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.144344",
+        "timestamp": "2026-08-26T17:28:07.803511",
         "path": "/project"
       },
-      "elapsed_ms": 3.43
+      "elapsed_ms": 3.45
     },
     {
       "category": "Security",
@@ -1269,13 +1269,13 @@
           "status": "todo",
           "priority": "low",
           "due_date": null,
-          "created_at": "2026-08-26T08:55:32"
+          "created_at": "2026-08-26T10:28:07"
         },
         "error": null,
-        "timestamp": "2026-08-26T15:55:32.149739",
+        "timestamp": "2026-08-26T17:28:07.809084",
         "path": "/project/1/tasks"
       },
-      "elapsed_ms": 5.48
+      "elapsed_ms": 5.64
     },
     {
       "category": "Security",
@@ -1294,9 +1294,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/users",
-        "timestamp": "2026-08-26T15:55:32.152821"
+        "timestamp": "2026-08-26T17:28:07.811867"
       },
-      "elapsed_ms": 2.54
+      "elapsed_ms": 2.37
     },
     {
       "category": "Security",
@@ -1315,9 +1315,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/users",
-        "timestamp": "2026-08-26T15:55:32.155140"
+        "timestamp": "2026-08-26T17:28:07.814603"
       },
-      "elapsed_ms": 2.19
+      "elapsed_ms": 2.72
     },
     {
       "category": "Security",
@@ -1336,9 +1336,9 @@
         "data": null,
         "error": "Unauthorized",
         "path": "/users/me",
-        "timestamp": "2026-08-26T15:55:32.157436"
+        "timestamp": "2026-08-26T17:28:07.816940"
       },
-      "elapsed_ms": 2.44
+      "elapsed_ms": 2.24
     },
     {
       "category": "Projects",
@@ -1346,20 +1346,13 @@
       "name": "Owner xóa thành viên khỏi dự án",
       "method": "DELETE",
       "endpoint": "/project/1/members/2",
-      "expected_status": 200,
-      "actual_status": 200,
+      "expected_status": 204,
+      "actual_status": 204,
       "status": "PASS",
-      "details": "Xóa thành viên thành công",
+      "details": "Xóa thành viên thành công (204 No Content)",
       "payload": null,
-      "response": {
-        "statusCode": 200,
-        "message": "Xóa thành viên thành công",
-        "data": null,
-        "error": null,
-        "timestamp": "2026-08-26T15:55:32.164980",
-        "path": "/project/1/members/2"
-      },
-      "elapsed_ms": 7.73
+      "response": null,
+      "elapsed_ms": 7.14
     },
     {
       "category": "Projects",
@@ -1378,9 +1371,9 @@
         "data": null,
         "error": "Bad Request",
         "path": "/project/1/members/1",
-        "timestamp": "2026-08-26T15:55:32.169820"
+        "timestamp": "2026-08-26T17:28:07.829162"
       },
-      "elapsed_ms": 4.04
+      "elapsed_ms": 4.79
     },
     {
       "category": "Tasks",
@@ -1388,20 +1381,13 @@
       "name": "Owner xóa task",
       "method": "DELETE",
       "endpoint": "/tasks/1",
-      "expected_status": 200,
-      "actual_status": 200,
+      "expected_status": 204,
+      "actual_status": 204,
       "status": "PASS",
-      "details": "Xóa task thành công",
+      "details": "Xóa task thành công (204 No Content)",
       "payload": null,
-      "response": {
-        "statusCode": 200,
-        "message": "Xóa task thành công",
-        "data": null,
-        "error": null,
-        "timestamp": "2026-08-26T15:55:32.176625",
-        "path": "/tasks/1"
-      },
-      "elapsed_ms": 6.87
+      "response": null,
+      "elapsed_ms": 6.43
     },
     {
       "category": "Projects",
@@ -1409,20 +1395,13 @@
       "name": "Owner xóa toàn bộ dự án",
       "method": "DELETE",
       "endpoint": "/project/1",
-      "expected_status": 200,
-      "actual_status": 200,
+      "expected_status": 204,
+      "actual_status": 204,
       "status": "PASS",
-      "details": "Xóa dự án và liên hoàn thành công",
+      "details": "Xóa dự án và liên hoàn thành công (204 No Content)",
       "payload": null,
-      "response": {
-        "statusCode": 200,
-        "message": "Xóa dự án thành công",
-        "data": null,
-        "error": null,
-        "timestamp": "2026-08-26T15:55:32.184593",
-        "path": "/project/1"
-      },
-      "elapsed_ms": 8.46
+      "response": null,
+      "elapsed_ms": 5.36
     }
   ]
 }

@@ -26,7 +26,7 @@ class CommentData(BaseModel):
 class TaskUpdate(BaseModel):
     title: str | None = Field(None, min_length=1, max_length=255)
     description: str | None = Field(None, max_length=2000)
-    assignee_id: int | None = None
+    assignee_id: int | None = Field(None, ge=1)
     status: TaskStatus | None = None
     priority: TaskPriority | None = None
     due_date: datetime | None = None

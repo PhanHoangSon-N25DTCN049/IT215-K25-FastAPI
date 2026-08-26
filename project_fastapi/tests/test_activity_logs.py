@@ -53,7 +53,7 @@ def test_activity_log_on_add_and_remove_member(client, user_headers, test_user, 
 
     # 2. Xóa thành viên
     del_res = client.delete(f"/project/{project.id}/members/{test_user2.id}", headers=user_headers)
-    assert del_res.status_code == 200
+    assert del_res.status_code == 204
 
     # 3. Kiểm tra log
     log_res = client.get(f"/project/{project.id}/activities", headers=user_headers)

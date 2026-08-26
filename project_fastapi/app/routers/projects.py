@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, Request, status
+from fastapi import Depends, APIRouter, Request, Response, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -183,8 +183,7 @@ def update_project_api(
 
 @project_router.delete(
     "/{project_id}",
-    status_code=status.HTTP_200_OK,
-    response_model=ApiResponse,
+    status_code=status.HTTP_204_NO_CONTENT,
     summary="Xóa dự án",
     description="Chỉ OWNER mới có quyền xóa dự án. Tự động xóa liên hoàn các thành viên và task liên quan."
 )
@@ -200,17 +199,12 @@ def del_project_api(
     
     del_project(project, db)
     
-    return api_response(
-        request,
-        200,
-        "Xóa dự án thành công"
-    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @project_router.delete(
     "/{project_id}/members/{user_id}",
-    status_code=status.HTTP_200_OK,
-    response_model=ApiResponse,
+    status_code=status.HTTP_204_NO_CONTENT,
     summary="Xóa thành viên khỏi dự án",
     description="Chỉ OWNER mới có quyền xóa thành viên. Không cho phép xóa người khởi tạo dự án (Owner chính)."
 )
@@ -237,11 +231,7 @@ def del_project_member_api(
         db=db
     )
     
-    return api_response(
-        request,
-        200,
-        "Xóa thành viên thành công",
-    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @project_router.get(

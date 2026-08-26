@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, Request, Query, status
+from fastapi import Depends, APIRouter, Request, Response, Query, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -11,6 +11,7 @@ from app.services import create_task, get_all_task, get_task_by_id, update_task,
 from app.core import ForbiddenException, BadRequestException
 
 task_router = APIRouter(prefix="/tasks", tags=["Task"])
+
 
 
 @project_router.post(
@@ -129,14 +130,15 @@ def update_task_api(
         raise ForbiddenException("Bạn không có quyền chỉnh sửa task này")
     
     check_task = task_data.model_dump(exclude_unset=True)
-    new_assignee = check_task.get("assignee_id")
-    if new_assignee:
-        is_member = db.query(ProjectMembersModel).filter(
-            ProjectMembersModel.project_id == task.project_id,
-            ProjectMembersModel.user_id == new_assignee
-        ).first()
-        if not is_member:
-            raise BadRequestException("Người dùng này không phải là thành viên của dự án")
+    if "assignee_id" in check_task:
+        new_assignee = check_task["assignee_id"]
+        if new_assignee is not None:
+            is_member = db.query(ProjectMembersModel).filter(
+                ProjectMembersModel.project_id == task.project_id,
+                ProjectMembersModel.user_id == new_assignee
+            ).first()
+            if not is_member:
+                raise BadRequestException("Người dùng này không phải là thành viên của dự án")
     
     task_update = update_task(task, check_task, db)
     
@@ -150,8 +152,7 @@ def update_task_api(
 
 @task_router.delete(
     "/{task_id}",
-    status_code=status.HTTP_200_OK,
-    response_model=ApiResponse,
+    status_code=status.HTTP_204_NO_CONTENT,
     summary="Xóa công việc (task)",
     description="Chỉ Project Owner mới có quyền xóa task. Thành viên thường hoặc Assignee không có quyền xóa."
 )
@@ -167,11 +168,7 @@ def del_task_api(
     
     del_task(task, db)
     
-    return api_response(
-        request,
-        200,
-        "Xóa task thành công"
-    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @task_router.post(

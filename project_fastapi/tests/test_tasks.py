@@ -189,15 +189,14 @@ def test_update_task_assign_to_non_member(client, user_headers, test_project_wit
 
 
 def test_delete_task_as_owner(client, user_headers, test_project_with_members, test_user, db_session):
-    """Owner xóa task -> 200 OK"""
+    """Owner xóa task -> 204 No Content"""
     t = TaskModel(project_id=test_project_with_members.id, title="Task to Delete", description="Initial", assignee_id=test_user.id, priority=TaskPriority.LOW, status=TaskStatus.TODO, due_date=datetime.now() + timedelta(days=2))
     db_session.add(t)
     db_session.commit()
     db_session.refresh(t)
 
     res = client.delete(f"/tasks/{t.id}", headers=user_headers)
-    assert res.status_code == 200
-    assert "Xóa task thành công" in res.json()["message"]
+    assert res.status_code == 204
 
     # Verify deleted
     res_check = client.get(f"/tasks/{t.id}", headers=user_headers)
@@ -217,7 +216,7 @@ def test_delete_task_as_non_owner(client, user2_headers, test_project_with_membe
 
 
 def test_delete_task_with_comments_as_owner(client, user_headers, user2_headers, test_project_with_members, test_user, db_session):
-    """Owner xóa Task ĐÃ CÓ COMMENTS -> Xóa thành công 200 OK và tự động cascade delete comments"""
+    """Owner xóa Task ĐÃ CÓ COMMENTS -> Xóa thành công 204 No Content và tự động cascade delete comments"""
     # 1. Tạo task bởi Owner
     t = TaskModel(
         project_id=test_project_with_members.id,
@@ -246,9 +245,7 @@ def test_delete_task_with_comments_as_owner(client, user_headers, user2_headers,
 
     # 4. Owner tiến hành xóa task
     res_delete = client.delete(f"/tasks/{t.id}", headers=user_headers)
-    assert res_delete.status_code == 200
-    assert res_delete.json()["statusCode"] == 200
-    assert "Xóa task thành công" in res_delete.json()["message"]
+    assert res_delete.status_code == 204
 
     # 5. Xác minh Task đã bị xóa khỏi hệ thống -> 404 Not Found
     res_get_task = client.get(f"/tasks/{t.id}", headers=user_headers)
@@ -257,4 +254,25 @@ def test_delete_task_with_comments_as_owner(client, user_headers, user2_headers,
     # 6. Xác minh Endpoint Comments của task đã xóa trả về 404 Not Found
     res_get_comments = client.get(f"/tasks/{t.id}/comments", headers=user_headers)
     assert res_get_comments.status_code == 404
+
+
+def test_update_task_assignee_zero_validation(client, user_headers, test_project_with_members, test_user, db_session):
+    """Cập nhật task với assignee_id = 0 -> 422 Unprocessable Entity"""
+    t = TaskModel(
+        project_id=test_project_with_members.id,
+        title="Zero Assignee Task",
+        description="Initial",
+        assignee_id=test_user.id,
+        priority=TaskPriority.LOW,
+        status=TaskStatus.TODO,
+        due_date=datetime.now() + timedelta(days=2)
+    )
+    db_session.add(t)
+    db_session.commit()
+    db_session.refresh(t)
+
+    payload = {"assignee_id": 0}
+    res = client.patch(f"/tasks/{t.id}", json=payload, headers=user_headers)
+    assert res.status_code == 422
+
 

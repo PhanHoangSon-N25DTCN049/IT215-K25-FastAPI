@@ -476,10 +476,10 @@ def run_qa_suite():
     # -------------------------------------------------------------
     # TC-PRJ-013: Owner Removes Member from Project
     t0 = time.time(); res = client.delete(f"/project/{project_id}/members/{member_user_id}", headers=owner_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 200:
-        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 200, res.status_code, "PASS", "Xóa thành viên thành công", None, res.json(), elapsed)
+    if res.status_code == 204:
+        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 204, res.status_code, "PASS", "Xóa thành viên thành công (204 No Content)", None, None, elapsed)
     else:
-        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 200, res.status_code, "FAIL", "Xóa thành viên thất bại", None, res.text, elapsed)
+        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 204, res.status_code, "FAIL", "Xóa thành viên thất bại", None, res.text, elapsed)
 
     # TC-PRJ-014: Owner Attempts to Delete Project Creator (Self)
     owner_user_id = user_owner.id
@@ -491,17 +491,17 @@ def run_qa_suite():
 
     # TC-TSK-010: Owner Deletes Task
     t0 = time.time(); res = client.delete(f"/tasks/{task_id}", headers=owner_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 200:
-        record("Tasks", "TC-TSK-010", "Owner xóa task", "DELETE", f"/tasks/{task_id}", 200, res.status_code, "PASS", "Xóa task thành công", None, res.json(), elapsed)
+    if res.status_code == 204:
+        record("Tasks", "TC-TSK-010", "Owner xóa task", "DELETE", f"/tasks/{task_id}", 204, res.status_code, "PASS", "Xóa task thành công (204 No Content)", None, None, elapsed)
     else:
-        record("Tasks", "TC-TSK-010", "Owner xóa task", "DELETE", f"/tasks/{task_id}", 200, res.status_code, "FAIL", "Xóa task thất bại", None, res.text, elapsed)
+        record("Tasks", "TC-TSK-010", "Owner xóa task", "DELETE", f"/tasks/{task_id}", 204, res.status_code, "FAIL", "Xóa task thất bại", None, res.text, elapsed)
 
     # TC-PRJ-015: Owner Deletes Project (Cascade Check)
     t0 = time.time(); res = client.delete(f"/project/{project_id}", headers=owner_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 200:
-        record("Projects", "TC-PRJ-015", "Owner xóa toàn bộ dự án", "DELETE", f"/project/{project_id}", 200, res.status_code, "PASS", "Xóa dự án và liên hoàn thành công", None, res.json(), elapsed)
+    if res.status_code == 204:
+        record("Projects", "TC-PRJ-015", "Owner xóa toàn bộ dự án", "DELETE", f"/project/{project_id}", 204, res.status_code, "PASS", "Xóa dự án và liên hoàn thành công (204 No Content)", None, None, elapsed)
     else:
-        record("Projects", "TC-PRJ-015", "Owner xóa toàn bộ dự án", "DELETE", f"/project/{project_id}", 200, res.status_code, "FAIL", "Xóa dự án thất bại", None, res.text, elapsed)
+        record("Projects", "TC-PRJ-015", "Owner xóa toàn bộ dự án", "DELETE", f"/project/{project_id}", 204, res.status_code, "FAIL", "Xóa dự án thất bại", None, res.text, elapsed)
 
     # Write execution output to json
     summary = {

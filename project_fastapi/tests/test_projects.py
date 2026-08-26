@@ -154,12 +154,11 @@ def test_update_project_as_non_owner(client, user2_headers, test_user, test_user
 
 
 def test_delete_project_as_owner(client, user_headers, test_user, db_session):
-    """Owner xóa dự án -> 200 OK"""
+    """Owner xóa dự án -> 204 No Content"""
     proj = save_project({"name": "To Delete", "description": "Delete"}, test_user.id, db_session)
 
     res = client.delete(f"/project/{proj.id}", headers=user_headers)
-    assert res.status_code == 200
-    assert "Xóa dự án thành công" in res.json()["message"]
+    assert res.status_code == 204
 
     # Verify deleted via API
     check_res = client.get(f"/project/{proj.id}", headers=user_headers)
@@ -184,13 +183,12 @@ def test_delete_project_as_non_owner(client, user2_headers, test_user, test_user
 
 
 def test_delete_member_as_owner(client, user_headers, test_user, test_user2, db_session):
-    """Owner xóa thành viên khỏi dự án -> 200 OK"""
+    """Owner xóa thành viên khỏi dự án -> 204 No Content"""
     proj = save_project({"name": "Team Delete", "description": "Desc"}, test_user.id, db_session)
     join_project(test_user2.id, proj.id, db_session, RoleProject.MEMBER)
 
     res = client.delete(f"/project/{proj.id}/members/{test_user2.id}", headers=user_headers)
-    assert res.status_code == 200
-    assert "Xóa thành viên thành công" in res.json()["message"]
+    assert res.status_code == 204
 
 
 def test_delete_member_as_non_owner(client, user2_headers, test_user, test_user2, db_session):

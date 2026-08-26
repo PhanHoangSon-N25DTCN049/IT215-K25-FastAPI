@@ -8,8 +8,7 @@ def test_delete_member_logic(client, user_headers, user2_headers, test_user, tes
     join_project(test_user2.id, proj.id, db_session, RoleProject.MEMBER)
 
     res = client.delete(f"/project/{proj.id}/members/{test_user2.id}", headers=user_headers)
-    assert res.status_code == 200
-    assert "Xóa thành viên thành công" in res.json()["message"]
+    assert res.status_code == 204
 
 
 def test_delete_nonexistent_member(client, user_headers, test_user, db_session):

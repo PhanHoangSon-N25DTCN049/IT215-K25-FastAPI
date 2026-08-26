@@ -308,13 +308,13 @@ def run_all_api_tests():
         else:
             record_test("Projects", "DELETE /project/{id}/members/{user_id} - Xóa member không tồn tại", "DELETE", f"/project/{proj_id}/members/999999", 404, res.status_code, "FAIL", "Không trả về 404", response_body=res.text)
 
-    # Delete Member Logic (user_id) -> Should return 200 OK
+    # Delete Member Logic (user_id) -> Should return 204 No Content
     if proj_id:
         res = client.delete(f"/project/{proj_id}/members/{u2.id}", headers=headers_u1)
-        if res.status_code == 200:
-            record_test("Projects", "DELETE /project/{id}/members/{user_id} - Xóa thành viên theo user_id", "DELETE", f"/project/{proj_id}/members/{u2.id}", 200, res.status_code, "PASS", "Xóa thành viên khỏi project thành công", response_body=res.json())
+        if res.status_code == 204:
+            record_test("Projects", "DELETE /project/{id}/members/{user_id} - Xóa thành viên theo user_id", "DELETE", f"/project/{proj_id}/members/{u2.id}", 204, res.status_code, "PASS", "Xóa thành viên khỏi project thành công (204 No Content)")
         else:
-            record_test("Projects", "DELETE /project/{id}/members/{user_id} - Xóa thành viên theo user_id", "DELETE", f"/project/{proj_id}/members/{u2.id}", 200, res.status_code, "FAIL", "Xóa thành viên thất bại", response_body=res.text)
+            record_test("Projects", "DELETE /project/{id}/members/{user_id} - Xóa thành viên theo user_id", "DELETE", f"/project/{proj_id}/members/{u2.id}", 204, res.status_code, "FAIL", "Xóa thành viên thất bại", response_body=res.text)
 
     # Delete Project (Non-owner) -> Should be 403
     if proj_id:
@@ -368,18 +368,18 @@ def run_all_api_tests():
         # Delete Task (Owner)
         if task_id:
             res = client.delete(f"/tasks/{task_id}", headers=headers_u1)
-            if res.status_code == 200:
-                record_test("Tasks", "DELETE /tasks/{id} - Xóa task", "DELETE", f"/tasks/{task_id}", 200, res.status_code, "PASS", "Xóa task thành công", response_body=res.json())
+            if res.status_code == 204:
+                record_test("Tasks", "DELETE /tasks/{id} - Xóa task", "DELETE", f"/tasks/{task_id}", 204, res.status_code, "PASS", "Xóa task thành công (204 No Content)")
             else:
-                record_test("Tasks", "DELETE /tasks/{id} - Xóa task", "DELETE", f"/tasks/{task_id}", 200, res.status_code, "FAIL", "Xóa task thất bại", response_body=res.text)
+                record_test("Tasks", "DELETE /tasks/{id} - Xóa task", "DELETE", f"/tasks/{task_id}", 204, res.status_code, "FAIL", "Xóa task thất bại", response_body=res.text)
 
     # Delete Project (Owner)
     if proj_id:
         res = client.delete(f"/project/{proj_id}", headers=headers_u1)
-        if res.status_code == 200:
-            record_test("Projects", "DELETE /project/{id} - Owner xóa dự án", "DELETE", f"/project/{proj_id}", 200, res.status_code, "PASS", "Xóa dự án thành công", response_body=res.json())
+        if res.status_code == 204:
+            record_test("Projects", "DELETE /project/{id} - Owner xóa dự án", "DELETE", f"/project/{proj_id}", 204, res.status_code, "PASS", "Xóa dự án thành công (204 No Content)")
         else:
-            record_test("Projects", "DELETE /project/{id} - Owner xóa dự án", "DELETE", f"/project/{proj_id}", 200, res.status_code, "FAIL", "Xóa dự án thất bại", response_body=res.text)
+            record_test("Projects", "DELETE /project/{id} - Owner xóa dự án", "DELETE", f"/project/{proj_id}", 204, res.status_code, "FAIL", "Xóa dự án thất bại", response_body=res.text)
 
     # Summary Statistics
     total_tests = len(results)
