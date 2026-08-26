@@ -403,28 +403,29 @@ def run_qa_suite():
         record("Tasks", "TC-TSK-009", "Member thường cố tình xóa task", "DELETE", f"/tasks/{task_id}", 403, res.status_code, "FAIL", "Không chặn member xóa task", None, res.text, elapsed)
 
     # -------------------------------------------------------------
-    # 6. COMMENTS MODULE SUITE (Deep QA Audit)
+    # 6. COMMENTS MODULE SUITE (Verified After Fix)
     # -------------------------------------------------------------
-    # TC-CMT-001: Standard REST endpoint /tasks/{task_id}/comments
-    t0 = time.time(); res = client.post(f"/tasks/{task_id}/comments", json={"content": "Tài liệu ERD đã upload lên wiki"}, headers=member_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 201:
-        record("Comments", "TC-CMT-001", "Tạo bình luận vào Task (Chuẩn RESTful Path)", "POST", f"/tasks/{task_id}/comments", 201, res.status_code, "PASS", "Thêm comment thành công", {"content": "..."}, res.json(), elapsed)
+    # TC-CMT-001: Create Comment on Task (Standard RESTful Path)
+    p_cmt = {"content": "Tài liệu ERD đã upload lên wiki nội bộ."}
+    t0 = time.time(); res = client.post(f"/tasks/{task_id}/comments", json=p_cmt, headers=member_hdr); elapsed = (time.time() - t0) * 1000
+    if res.status_code == 201 and res.json().get("statusCode") == 201 and res.json()["data"]["content"] == p_cmt["content"]:
+        record("Comments", "TC-CMT-001", "Tạo bình luận vào Task (Chuẩn RESTful Path)", "POST", f"/tasks/{task_id}/comments", 201, res.status_code, "PASS", "Thêm comment thành công, lưu đúng user_id và nội dung", p_cmt, res.json(), elapsed)
     else:
-        record("Comments", "TC-CMT-001", "Tạo bình luận vào Task (Chuẩn RESTful Path)", "POST", f"/tasks/{task_id}/comments", 201, res.status_code, "BUG (CRITICAL)", f"Endpoint trả về HTTP {res.status_code} do Router thiếu dấu '/' (bị map thành /tasks{task_id}/comments thay vì /tasks/{task_id}/comments)", {"content": "..."}, res.text, elapsed)
+        record("Comments", "TC-CMT-001", "Tạo bình luận vào Task (Chuẩn RESTful Path)", "POST", f"/tasks/{task_id}/comments", 201, res.status_code, "FAIL", "Lỗi tạo comment", p_cmt, res.text, elapsed)
 
-    # TC-CMT-002: Actual Registered Mismatched Path /tasks{task_id}/comments
-    t0 = time.time(); res = client.post(f"/tasks{task_id}/comments", json={"content": "Tài liệu ERD đã upload lên wiki"}, headers=member_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 201:
-        record("Comments", "TC-CMT-002", "Tạo bình luận vào Task (Đường dẫn Router thực tế)", "POST", f"/tasks{task_id}/comments", 201, res.status_code, "PASS", "Thêm comment thành công", {"content": "..."}, res.json(), elapsed)
-    else:
-        record("Comments", "TC-CMT-002", "Tạo bình luận vào Task (Đường dẫn Router thực tế)", "POST", f"/tasks{task_id}/comments", 201, res.status_code, "BUG (HIGH)", f"Lỗi thực thi 500: Truyền dict model_dump() vào cột String và gán nhầm user_id=member.id (project_members.id thay vì user_id)", {"content": "..."}, res.text, elapsed)
-
-    # TC-CMT-003: Get Comments Standard REST endpoint
+    # TC-CMT-002: Get All Comments on Task (Standard RESTful Path)
     t0 = time.time(); res = client.get(f"/tasks/{task_id}/comments", headers=member_hdr); elapsed = (time.time() - t0) * 1000
-    if res.status_code == 200:
-        record("Comments", "TC-CMT-003", "Lấy danh sách bình luận Task (Chuẩn RESTful Path)", "GET", f"/tasks/{task_id}/comments", 200, res.status_code, "PASS", "Lấy comments thành công", None, res.json(), elapsed)
+    if res.status_code == 200 and isinstance(res.json().get("data"), list) and len(res.json()["data"]) >= 1:
+        record("Comments", "TC-CMT-002", "Lấy danh sách bình luận của Task", "GET", f"/tasks/{task_id}/comments", 200, res.status_code, "PASS", f"Trả về danh sách {len(res.json()['data'])} bình luận", None, res.json(), elapsed)
     else:
-        record("Comments", "TC-CMT-003", "Lấy danh sách bình luận Task (Chuẩn RESTful Path)", "GET", f"/tasks/{task_id}/comments", 200, res.status_code, "BUG (CRITICAL)", f"Endpoint 404 Not Found do Router thiếu '/'", None, res.text, elapsed)
+        record("Comments", "TC-CMT-002", "Lấy danh sách bình luận của Task", "GET", f"/tasks/{task_id}/comments", 200, res.status_code, "FAIL", "Lỗi lấy danh sách comments", None, res.text, elapsed)
+
+    # TC-CMT-003: Stranger Cannot Comment on Task (IDOR Check)
+    t0 = time.time(); res = client.post(f"/tasks/{task_id}/comments", json={"content": "Hacker comment"}, headers=stranger_hdr); elapsed = (time.time() - t0) * 1000
+    if res.status_code == 403:
+        record("Comments", "TC-CMT-003", "Người ngoài bình luận trái phép (IDOR Check)", "POST", f"/tasks/{task_id}/comments", 403, res.status_code, "PASS", "Chặn người ngoài bình luận bằng 403 Forbidden", None, res.json(), elapsed)
+    else:
+        record("Comments", "TC-CMT-003", "Người ngoài bình luận trái phép (IDOR Check)", "POST", f"/tasks/{task_id}/comments", 403, res.status_code, "FAIL", "Lỗi IDOR: Cho phép người ngoài comment", None, res.text, elapsed)
 
     # -------------------------------------------------------------
     # 7. SECURITY & EDGE CASES SUITE
@@ -478,7 +479,7 @@ def run_qa_suite():
     if res.status_code == 200:
         record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 200, res.status_code, "PASS", "Xóa thành viên thành công", None, res.json(), elapsed)
     else:
-        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 200, res.status_code, "FAIL", "Xóa thành viên thất bại", None, res.json(), elapsed)
+        record("Projects", "TC-PRJ-013", "Owner xóa thành viên khỏi dự án", "DELETE", f"/project/{project_id}/members/{member_user_id}", 200, res.status_code, "FAIL", "Xóa thành viên thất bại", None, res.text, elapsed)
 
     # TC-PRJ-014: Owner Attempts to Delete Project Creator (Self)
     owner_user_id = user_owner.id

@@ -34,7 +34,7 @@ class TaskModel(Base):
     
     project: Mapped["ProjectModel"] = relationship(back_populates="task")
     assignee: Mapped["UserModel"] = relationship(back_populates="task")
-    comment: Mapped["CommentTaskModel"] = relationship(back_populates="task")
+    comment: Mapped[List["CommentTaskModel"]] = relationship(back_populates="task", cascade="all, delete-orphan")
     
     
 class CommentTaskModel(Base):

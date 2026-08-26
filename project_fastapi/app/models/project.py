@@ -27,7 +27,7 @@ class ProjectModel(Base):
     owner: Mapped["UserModel"] = relationship(back_populates="project")
     project_member: Mapped[List["ProjectMembersModel"]] = relationship(back_populates="project", cascade="all, delete-orphan")
     task: Mapped[List["TaskModel"]] = relationship(back_populates="project", cascade="all, delete-orphan")
-    activity_logs: Mapped[List["ActivityLogModel"]] = relationship(back_populates="project")
+    activity_logs: Mapped[List["ActivityLogModel"]] = relationship(back_populates="project", cascade="all, delete-orphan")
     
     
 

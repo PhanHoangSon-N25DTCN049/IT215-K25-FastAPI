@@ -214,3 +214,47 @@ def test_delete_task_as_non_owner(client, user2_headers, test_project_with_membe
     res = client.delete(f"/tasks/{t.id}", headers=user2_headers)
     assert res.status_code == 403
     assert "Bạn không có quyền xóa task này" in res.json()["message"]
+
+
+def test_delete_task_with_comments_as_owner(client, user_headers, user2_headers, test_project_with_members, test_user, db_session):
+    """Owner xóa Task ĐÃ CÓ COMMENTS -> Xóa thành công 200 OK và tự động cascade delete comments"""
+    # 1. Tạo task bởi Owner
+    t = TaskModel(
+        project_id=test_project_with_members.id,
+        title="Task with multiple comments",
+        description="Task to be deleted with comments",
+        assignee_id=test_user.id,
+        priority=TaskPriority.HIGH,
+        status=TaskStatus.TODO,
+        due_date=datetime.now() + timedelta(days=3)
+    )
+    db_session.add(t)
+    db_session.commit()
+    db_session.refresh(t)
+
+    # 2. Thêm 2 comments vào task (1 bởi Owner, 1 bởi Member)
+    res_c1 = client.post(f"/tasks/{t.id}/comments", json={"content": "Comment 1 from Owner"}, headers=user_headers)
+    assert res_c1.status_code == 201
+
+    res_c2 = client.post(f"/tasks/{t.id}/comments", json={"content": "Comment 2 from Member"}, headers=user2_headers)
+    assert res_c2.status_code == 201
+
+    # 3. Kiểm tra danh sách comment trước khi xóa
+    res_list_before = client.get(f"/tasks/{t.id}/comments", headers=user_headers)
+    assert res_list_before.status_code == 200
+    assert len(res_list_before.json()["data"]) == 2
+
+    # 4. Owner tiến hành xóa task
+    res_delete = client.delete(f"/tasks/{t.id}", headers=user_headers)
+    assert res_delete.status_code == 200
+    assert res_delete.json()["statusCode"] == 200
+    assert "Xóa task thành công" in res_delete.json()["message"]
+
+    # 5. Xác minh Task đã bị xóa khỏi hệ thống -> 404 Not Found
+    res_get_task = client.get(f"/tasks/{t.id}", headers=user_headers)
+    assert res_get_task.status_code == 404
+
+    # 6. Xác minh Endpoint Comments của task đã xóa trả về 404 Not Found
+    res_get_comments = client.get(f"/tasks/{t.id}/comments", headers=user_headers)
+    assert res_get_comments.status_code == 404
+
